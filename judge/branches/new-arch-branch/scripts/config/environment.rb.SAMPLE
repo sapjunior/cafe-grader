@@ -2,5 +2,8 @@
 # Rails app directory
 RAILS_APP_DIR = "/home/jittat/web_grader"
 
+require File.join(File.dirname(__FILE__),'../lib/boot')
+
 # load the required environment file
 require File.dirname(__FILE__) + "/env_#{GRADER_ENV}.rb"
+
