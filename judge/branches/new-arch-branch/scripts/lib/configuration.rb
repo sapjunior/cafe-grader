@@ -11,6 +11,7 @@ module Grader
     attr_accessor :report_grader
     attr_accessor :grader_hostname    
     attr_accessor :report_comment
+    attr_accessor :rails_env
 
     @@instance = nil
 
@@ -27,6 +28,8 @@ module Grader
       @report_grader = false
       @grader_hostname = `hostname`.chomp
 
+      @rails_env = 'development'
+      
       @report_comment = lambda { |comment| comment }
     end
 

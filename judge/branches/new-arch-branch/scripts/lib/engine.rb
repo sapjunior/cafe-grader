@@ -8,10 +8,10 @@ module Grader
       @grader_process = grader_process
     end
 
-    def grade(submission_id)
+    def grade(sub)
       current_dir = `pwd`.chomp
-      
-      sub = Submission.find(submission_id)
+
+      submission_id = sub.id
       user = sub.user
       problem = sub.problem
       
@@ -24,20 +24,22 @@ module Grader
       end
 
       user_dir = "#{@config.user_result_dir}/#{user.login}"
-      Dir.mkdir(user_dir) if !FileTest.exist?(user_dir)
-      
-      problem_out_dir = "#{user_dir}/#{problem.name}/#{submission_id}"
-      Dir.mkdir(problem_out_dir) if !FileTest.exist?(problem_out_dir)
-      
+      problem_out_dir = "#{user_dir}/#{problem.name}"
+      submission_out_dir = "#{user_dir}/#{problem.name}/#{submission_id}"
+
+      mkdir_if_does_not_exist(user_dir)
+      mkdir_if_does_not_exist(problem_out_dir)
+      mkdir_if_does_not_exist(submission_out_dir)
+
       problem_home = "#{@config.problems_dir}/#{problem.name}"
       source_name = "#{problem.name}.#{lang_ext}"
       
-      save_source(sub,problem_out_dir,source_name)
+      save_source(sub,submission_out_dir,source_name)
       
       copy_log = copy_script(problem_home)
       
-      call_judge(problem_home,language,problem_out_dir,source_name)
-      save_result(sub,read_result("#{problem_out_dir}/test-result"))
+      call_judge(problem_home,language,submission_out_dir,source_name)
+      save_result(sub,read_result("#{submission_out_dir}/test-result"))
       
       clear_script(copy_log,problem_home)
       
@@ -49,7 +51,8 @@ module Grader
       if task!=nil 
         @grader_process.report_active(task) if @grader_process!=nil
     
-        grade(task.submission_id)
+        submission = Submission.find(task.submission_id)
+        grade(submission)
         task.status_complete!
       end
       return task
@@ -64,7 +67,7 @@ module Grader
                                                   "problem_id = #{prob.id}",
                                    :order => 'submitted_at DESC')
         if last_sub!=nil
-          grade(last_sub.id)
+          grade(last_sub)
         end
       end
     end
@@ -90,11 +93,11 @@ module Grader
       f.close
     end
 
-    def call_judge(problem_home,language,problem_out_dir,fname)
+    def call_judge(problem_home,language,submission_out_dir,fname)
       ENV['PROBLEM_HOME'] = problem_home
       
-      puts problem_out_dir
-      Dir.chdir problem_out_dir
+      puts submission_out_dir
+      Dir.chdir submission_out_dir
       cmd = "#{problem_home}/script/judge #{language} #{fname}"
       #  puts "CMD: #{cmd}"
       system(cmd)
@@ -162,6 +165,10 @@ module Grader
       log.each do |s|
         system("rm #{problem_home}/script/#{s}")
       end
+    end
+
+    def mkdir_if_does_not_exist(dirname)
+      Dir.mkdir(dirname) if !FileTest.exist?(dirname)
     end
     
   end

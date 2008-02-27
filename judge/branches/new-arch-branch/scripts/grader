@@ -55,7 +55,7 @@ require File.join(File.dirname(__FILE__),'config/environment')
 #reading rails environment
 talk 'Reading rails environment'
 
-RAILS_ENV = 'development'
+RAILS_ENV = config.rails_env
 require RAILS_APP_DIR + '/config/environment'
 
 
