@@ -18,7 +18,7 @@ class TestGraderEngine < UnitTest.TestCase
 
     @engine = Grader::Engine.new    
 
-    clear_user_result_dir
+    init_sandbox
   end
 
   def teardown
@@ -30,7 +30,7 @@ class TestGraderEngine < UnitTest.TestCase
   end
 
   def test_normal_submission
-    submission = create_test1_submission_mock_for_grading
+    submission = create_test1_submission_mock_from_file("test1_correct.c")
 
     submission.expects(:graded_at=)
     submission.expects(:points=).with(135)
@@ -43,17 +43,46 @@ class TestGraderEngine < UnitTest.TestCase
     @engine.grade(submission)
   end
 
-  protected
+  def test_compile_error_submission
+    submission = create_test1_submission_mock_from_file("test1_compile_error.c")
 
-  def clear_all_submissions
-    Submission.find(:all).each do |submission|
-      submission.destroy
+    submission.expects(:graded_at=)
+    submission.expects(:points=).with(0)
+    submission.expects(:grader_comment=).with('FAILED: compile error')
+    submission.expects(:compiler_message=) do |value|
+      /[Ee]rror/.match value
     end
+    submission.expects(:save)
+
+    @engine.grade(submission)
   end
 
-  def clear_user_result_dir
-    clear_cmd = "rm -rf #{@config.user_result_dir}/*"
+  def test_timeout_submission
+    submission = create_test1_submission_mock_from_file("test1_timeout.c")
+
+    submission.expects(:graded_at=)
+    submission.expects(:points=).with(0)
+    submission.expects(:grader_comment=).with do |value|
+      /^FAILED: T+$/.match value
+    end
+    submission.expects(:compiler_message=).with('')
+    submission.expects(:save)
+
+    @engine.grade(submission)
+  end
+
+  protected
+
+  def clear_sandbox
+    clear_cmd = "rm -rf #{@config.test_sandbox_dir}/*"
     system(clear_cmd)
+  end
+
+  def init_sandbox
+    clear_sandbox
+    Dir.mkdir @config.user_result_dir
+    cp_cmd = "cp -R #{@config.test_data_dir}/ev #{@config.test_sandbox_dir}"
+    system(cp_cmd)
   end
 
   def create_submission_from_file(id, user, problem, source_fname, language = @@lang_c)
@@ -62,8 +91,8 @@ class TestGraderEngine < UnitTest.TestCase
          :source => source, :language => language)
   end
 
-  def create_test1_submission_mock_for_grading
-    create_submission_from_file(1, @user_user1, @problem_test1, "test1_correct.c")
+  def create_test1_submission_mock_from_file(source_fname)
+    create_submission_from_file(1, @user_user1, @problem_test1, source_fname)
   end
   
 end

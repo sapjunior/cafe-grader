@@ -56,7 +56,7 @@ require File.join(File.dirname(__FILE__),'config/environment')
 talk 'Reading rails environment'
 
 RAILS_ENV = config.rails_env
-require RAILS_APP_DIR + '/config/environment'
+require RAILS_ROOT + '/config/environment'
 
 
 #register grader process

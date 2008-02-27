@@ -14,6 +14,9 @@ module Grader
       submission_id = sub.id
       user = sub.user
       problem = sub.problem
+
+      # TODO: will have to create real exception for this
+      raise "improper submission" if user==nil or problem==nil
       
       language = sub.language.name
       lang_ext = sub.language.ext
@@ -80,13 +83,6 @@ module Grader
       end
     end
 
-    def execute(command, error_message="")
-      if not system(command)
-        puts "ERROR: #{error_message}"
-        exit(127)
-      end
-    end
-
     def save_source(submission,dir,fname)
       f = File.open("#{dir}/#{fname}","w")
       f.write(submission.source)
@@ -99,7 +95,7 @@ module Grader
       puts submission_out_dir
       Dir.chdir submission_out_dir
       cmd = "#{problem_home}/script/judge #{language} #{fname}"
-      #  puts "CMD: #{cmd}"
+      puts "CMD: #{cmd}"
       system(cmd)
     end
 
@@ -131,21 +127,32 @@ module Grader
     end
     
     def save_result(submission,result)
-      problem = Problem.find(submission.problem_id)
+      problem = submission.problem
       submission.graded_at = Time.now
-      submission.points = result[:points]
-      if submission.points == problem.full_score
-        submission.grader_comment = 'PASSED: ' + @config.report_comment.call(result[:comment])
+      points = result[:points]
+      submission.points = points
+      comment = @config.report_comment.call(result[:comment])
+      if problem == nil
+        submission.grader_comment = 'PASSED: ' + comment + '(problem is nil)'
+      elsif points == problem.full_score
+        submission.grader_comment = 'PASSED: ' + comment
       else
-        submission.grader_comment = 'FAILED: ' + @config.report_comment.call(result[:comment])
+        submission.grader_comment = 'FAILED: ' + comment
       end
       submission.compiler_message = result[:cmp_msg]
       submission.save
     end
     
+    def get_std_script_dir
+      GRADER_ROOT + '/std-script'
+    end
+
     def copy_script(problem_home)
       script_dir = "#{problem_home}/script"
-      std_script_dir = File.dirname(__FILE__) + '/std-script'
+      std_script_dir = get_std_script_dir
+
+      raise "std-script directory not found" if !FileTest.exist?(std_script_dir)
+
       scripts = Dir[std_script_dir + '/*']
       
       copied = []
