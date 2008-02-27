@@ -11,11 +11,12 @@ class TestGraderEngine < UnitTest.TestCase
     @@lang_cpp = stub(:name => 'cpp', :ext => 'cpp')
     @@lang_pas = stub(:name => 'pas', :ext => 'pas')
 
-    @problem_test1 = stub(:id => 1, :name => 'test1', :full_score => 100)
+    @config = Grader::Configuration.get_instance
+
+    @problem_test1 = stub(:id => 1, :name => 'test1', :full_score => 135)
     @user_user1 = stub(:id => 1, :login => 'user1')
 
     @engine = Grader::Engine.new    
-    @config = Grader::Configuration.get_instance
 
     clear_user_result_dir
   end
@@ -29,16 +30,21 @@ class TestGraderEngine < UnitTest.TestCase
   end
 
   def test_normal_submission
-    submission = create_submission_from_file(1,
-                                             @user_user1,
-                                             @problem_test1,
-                                             "test1_correct.c")
-    Problem.expects(:find).with(@problem_test1.id).returns(@problem_test1)
+    submission = create_test1_submission_mock_for_grading
+
+    submission.expects(:graded_at=)
+    submission.expects(:points=).with(135)
+    submission.expects(:grader_comment=).with do |value|
+      /^PASSED/.match(value)
+    end
+    submission.expects(:compiler_message=).with('')
+    submission.expects(:save)
 
     @engine.grade(submission)
   end
 
   protected
+
   def clear_all_submissions
     Submission.find(:all).each do |submission|
       submission.destroy
@@ -56,4 +62,8 @@ class TestGraderEngine < UnitTest.TestCase
          :source => source, :language => language)
   end
 
+  def create_test1_submission_mock_for_grading
+    create_submission_from_file(1, @user_user1, @problem_test1, "test1_correct.c")
+  end
+  
 end
