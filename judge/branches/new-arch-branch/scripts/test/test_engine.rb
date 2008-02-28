@@ -58,7 +58,11 @@ class TestGraderEngine < UnitTest.TestCase
   end
 
   def test_timeout_submission
-    submission = create_test1_submission_mock_from_file("test1_timeout.c")
+    @problem_test2 = stub(:id => 1, :name => 'test2', :full_score => 20)
+    @user_user1 = stub(:id => 1, :login => 'user1')
+
+    submission = create_submission_from_file(1, @user_user1, @problem_test2,
+                                             "test2_timeout.c")
 
     submission.expects(:graded_at=)
     submission.expects(:points=).with(0)
