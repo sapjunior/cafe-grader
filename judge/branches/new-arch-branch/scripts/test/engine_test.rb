@@ -4,7 +4,7 @@ require 'mocha'
 
 require File.join(File.dirname(__FILE__),'test_helper')
 
-class TestGraderEngine < UnitTest.TestCase
+class GraderEngineTest < UnitTest.TestCase
 
   def setup
     @@lang_c = stub(:name => 'c', :ext => 'c')
