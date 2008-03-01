@@ -92,10 +92,10 @@ module Grader
     def call_judge(problem_home,language,submission_out_dir,fname)
       ENV['PROBLEM_HOME'] = problem_home
       
-      puts submission_out_dir
+      talk submission_out_dir
       Dir.chdir submission_out_dir
       cmd = "#{problem_home}/script/judge #{language} #{fname}"
-      puts "CMD: #{cmd}"
+      talk "CMD: #{cmd}"
       system(cmd)
     end
 

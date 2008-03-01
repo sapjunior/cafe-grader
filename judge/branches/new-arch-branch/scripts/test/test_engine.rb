@@ -58,7 +58,7 @@ class TestGraderEngine < UnitTest.TestCase
   end
 
   def test_timeout_submission
-    @problem_test2 = stub(:id => 1, :name => 'test2', :full_score => 20)
+    @problem_test2 = stub(:id => 1, :name => 'test2', :full_score => 10)
     @user_user1 = stub(:id => 1, :login => 'user1')
 
     submission = create_submission_from_file(1, @user_user1, @problem_test2,
@@ -73,6 +73,38 @@ class TestGraderEngine < UnitTest.TestCase
     submission.expects(:save)
 
     @engine.grade(submission)
+  end
+
+  def test_grade_oldest_task
+    # mock submission
+    submission = create_test1_submission_mock_from_file("test1_correct.c")
+
+    submission.expects(:graded_at=)
+    submission.expects(:points=).with(135)
+    submission.expects(:grader_comment=).with do |value|
+      /^PASSED/.match(value)
+    end
+    submission.expects(:compiler_message=).with('')
+    submission.expects(:save)
+
+    # mock task
+    task = stub(:id => 1, :submission_id => submission.id)
+    Task.expects(:get_inqueue_and_change_status).returns(task)
+    task.expects(:status_complete!)
+
+    # mock Submission
+    Submission.expects(:find).with(task.submission_id).returns(submission)
+
+    @engine.grade_oldest_task
+  end
+
+  def test_grade_oldest_task_with_grader_process
+    grader_process = stub
+    grader_process.expects(:report_active)
+
+    @engine = Grader::Engine.new(grader_process)
+
+    test_grade_oldest_task
   end
 
   protected

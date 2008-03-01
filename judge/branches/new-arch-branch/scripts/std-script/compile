@@ -11,7 +11,9 @@
 
 talk ()
 {
-    echo "$1"
+    if [ "$TALKATIVE" != "" ]; then
+	echo "$1"
+    fi
 }
 
 export C_COMPILER=/usr/bin/gcc
