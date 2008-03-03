@@ -67,7 +67,25 @@ class GraderEngineTest < UnitTest.TestCase
     submission.expects(:graded_at=)
     submission.expects(:points=).with(0)
     submission.expects(:grader_comment=).with do |value|
-      /^FAILED: T+$/.match value
+      /^FAILED: TT$/.match value
+    end
+    submission.expects(:compiler_message=).with('')
+    submission.expects(:save)
+
+    @engine.grade(submission)
+  end
+
+  def test_timeout_submission_running_one_and_a_half_second
+    @problem_test2 = stub(:id => 1, :name => 'test2', :full_score => 10)
+    @user_user1 = stub(:id => 1, :login => 'user1')
+
+    submission = create_submission_from_file(1, @user_user1, @problem_test2,
+                                             "test2_1-5sec.c")
+
+    submission.expects(:graded_at=)
+    submission.expects(:points=).with(0)
+    submission.expects(:grader_comment=).with do |value|
+      /^FAILED: TP$/.match value
     end
     submission.expects(:compiler_message=).with('')
     submission.expects(:save)
