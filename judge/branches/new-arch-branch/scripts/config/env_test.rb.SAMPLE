@@ -5,7 +5,7 @@ Grader::Initializer.run do |config|
   config.problems_dir = "/home/jittat/grader/scripts/test/sandbox/ev"
   config.user_result_dir = "/home/jittat/grader/scripts/test/sandbox/result"
   
-  config.talkative = true
+  config.talkative = false
   
   config.report_grader = false
 
