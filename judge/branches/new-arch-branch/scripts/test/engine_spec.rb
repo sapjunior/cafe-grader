@@ -13,11 +13,13 @@ describe "A grader engine" do
 
     @config = Grader::Configuration.get_instance
 
-    @problem_test1 = stub(Problem,
-                          :id => 1, :name => 'test1', :full_score => 135)
+    # this test is from Pong
+    @problem_test_normal = stub(Problem,
+                                :id => 1, :name => 'test_normal', 
+                                :full_score => 135)
     @user_user1 = stub(User,
                        :id => 1, :login => 'user1')
-
+    
     @engine = Grader::Engine.new    
 
     init_sandbox
@@ -42,41 +44,46 @@ describe "A grader engine" do
   end
 
   it "should produce error message when submission cannot compile" do
-    submission = create_test1_submission_mock_from_file("test1_compile_error.c")
+    error_submission = 
+      create_test1_submission_mock_from_file("test1_compile_error.c")
 
-    submission.should_receive(:graded_at=)
-    submission.should_receive(:points=).with(0)
-    submission.should_receive(:grader_comment=).with('FAILED: compile error')
-    submission.should_receive(:compiler_message=).with(/[Ee]rror/)
-    submission.should_receive(:save)
+    error_submission.should_receive(:graded_at=)
+    error_submission.should_receive(:points=).with(0)
+    error_submission.should_receive(:grader_comment=).with('FAILED: compile error')
+    error_submission.should_receive(:compiler_message=).with(/[Ee]rror/)
+    error_submission.should_receive(:save)
 
-    @engine.grade(submission)
+    @engine.grade(error_submission)
   end
 
   it "should produce timeout error when submission runs forever" do
-    @problem_test2 = stub(Problem,
-                          :id => 1, :name => 'test2', :full_score => 10)
+    @problem_test_timeout = stub(Problem,
+                                 :id => 1, :name => 'test_timeout', 
+                                 :full_score => 10)
     @user_user1 = stub(User,:id => 1, :login => 'user1')
 
-    submission = create_submission_from_file(1, @user_user1, @problem_test2,
-                                             "test2_timeout.c")
+    timedout_submission = 
+      create_submission_from_file(1, @user_user1, @problem_test_timeout,
+                                  "test2_timeout.c")
 
-    submission.should_receive(:graded_at=)
-    submission.should_receive(:points=).with(0)
-    submission.should_receive(:grader_comment=).with(/^FAILED: TT$/)
-    submission.should_receive(:compiler_message=).with('')
-    submission.should_receive(:save)
+    timedout_submission.should_receive(:graded_at=)
+    timedout_submission.should_receive(:points=).with(0)
+    timedout_submission.should_receive(:grader_comment=).with(/^FAILED: TT$/)
+    timedout_submission.should_receive(:compiler_message=).with('')
+    timedout_submission.should_receive(:save)
 
-    @engine.grade(submission)
+    @engine.grade(timedout_submission)
   end
 
   it "should produce timeout error correctly when submission runs slower than expected in less than a second" do
-    @problem_test2 = stub(Problem,
-                          :id => 1, :name => 'test2', :full_score => 20)
+    @problem_test_timeout = stub(Problem,
+                                 :id => 1, :name => 'test_timeout', 
+                                 :full_score => 20)
     @user_user1 = stub(User,
                        :id => 1, :login => 'user1')
 
-    submission = create_submission_from_file(1, @user_user1, @problem_test2,
+    submission = create_submission_from_file(1, @user_user1, 
+                                             @problem_test_timeout,
                                              "test2_1-5sec.c")
 
     submission.should_receive(:graded_at=)
@@ -89,7 +96,16 @@ describe "A grader engine" do
   end
 
   it "should produce runtime error when submission uses too much memory" do
-    violated("to be implemented")
+    mem_exceed_submission = 
+      create_test1_submission_mock_from_file("test1_too_much_memory_static.c")
+
+    mem_exceed_submission.should_receive(:graded_at=)
+    mem_exceed_submission.should_receive(:points=).with(0)
+    mem_exceed_submission.should_receive(:grader_comment=).with('FAILED: compile error')
+    mem_exceed_submission.should_receive(:compiler_message=).with(/[Ee]rror/)
+    mem_exceed_submission.should_receive(:save)
+
+    @engine.grade(mem_exceed_submission)
   end
 
   def test_grade_oldest_task
@@ -146,7 +162,7 @@ describe "A grader engine" do
   end
 
   def create_test1_submission_mock_from_file(source_fname)
-    create_submission_from_file(1, @user_user1, @problem_test1, source_fname)
+    create_submission_from_file(1, @user_user1, @problem_test_normal, source_fname)
   end
   
 end
