@@ -4,13 +4,41 @@
 
 require File.join(File.dirname(__FILE__),'spec_helper')
 
+module GraderEngineHelperMethods
+
+  def clear_sandbox
+    config = Grader::Configuration.get_instance
+    clear_cmd = "rm -rf #{config.test_sandbox_dir}/*"
+    system(clear_cmd)
+  end
+
+  def init_sandbox
+    config = Grader::Configuration.get_instance
+    clear_sandbox
+    Dir.mkdir config.user_result_dir
+    cp_cmd = "cp -R #{config.test_data_dir}/ev #{config.test_sandbox_dir}"
+    system(cp_cmd)
+  end
+
+  def create_submission_from_file(id, user, problem, 
+                                  source_fname, language=nil)
+
+    language = stub(Language, :name => 'c', :ext => 'c') if language==nil
+
+    config = Grader::Configuration.get_instance
+    source = File.open(config.test_data_dir + "/" + source_fname).read
+    stub(Submission,
+         :id => id, :user => user, :problem => problem,
+         :source => source, :language => language)
+  end
+
+end
+
 describe "A grader engine, when grading a submission" do
 
-  before(:each) do
-    @@lang_c = stub(Language, :name => 'c', :ext => 'c')
-    @@lang_cpp = stub(Language, :name => 'cpp', :ext => 'cpp')
-    @@lang_pas = stub(Language, :name => 'pas', :ext => 'pas')
+  include GraderEngineHelperMethods
 
+  before(:each) do
     @config = Grader::Configuration.get_instance
 
     # this test is from Pong
@@ -21,7 +49,6 @@ describe "A grader engine, when grading a submission" do
                        :id => 1, :login => 'user1')
     
     @engine = Grader::Engine.new    
-
     init_sandbox
   end
 
@@ -112,26 +139,7 @@ describe "A grader engine, when grading a submission" do
 
   protected
 
-  def clear_sandbox
-    clear_cmd = "rm -rf #{@config.test_sandbox_dir}/*"
-    system(clear_cmd)
-  end
-
-  def init_sandbox
-    clear_sandbox
-    Dir.mkdir @config.user_result_dir
-    cp_cmd = "cp -R #{@config.test_data_dir}/ev #{@config.test_sandbox_dir}"
-    system(cp_cmd)
-  end
-
-  def create_submission_from_file(id, user, problem, source_fname, language = @@lang_c)
-    source = File.open(@config.test_data_dir + "/" + source_fname).read
-    stub(Submission,
-         :id => id, :user => user, :problem => problem,
-         :source => source, :language => language)
-  end
-
-  def create_test1_submission_mock_from_file(source_fname)
+  def create_normal_submission_mock_from_file(source_fname)
     create_submission_from_file(1, @user_user1, @problem_test_normal, source_fname)
   end
   
@@ -139,11 +147,10 @@ end
 
 
 describe "A grader engine, when working with task queue" do
-  before(:each) do
-    @@lang_c = stub(Language, :name => 'c', :ext => 'c')
-    @@lang_cpp = stub(Language, :name => 'cpp', :ext => 'cpp')
-    @@lang_pas = stub(Language, :name => 'pas', :ext => 'pas')
 
+  include GraderEngineHelperMethods
+
+  before(:each) do
     @config = Grader::Configuration.get_instance
     @problem_test_normal = stub(Problem,
                                 :id => 1, :name => 'test_normal', 
@@ -161,7 +168,7 @@ describe "A grader engine, when working with task queue" do
   end
 
   it "should grade oldest task in queue" do
-    submission = create_test1_submission_mock_from_file("test1_correct.c")
+    submission = create_normal_submission_mock_from_file("test1_correct.c")
 
     submission.should_receive(:graded_at=)
     submission.should_receive(:points=).with(135)
@@ -194,27 +201,9 @@ describe "A grader engine, when working with task queue" do
 
   protected
 
-  def clear_sandbox
-    clear_cmd = "rm -rf #{@config.test_sandbox_dir}/*"
-    system(clear_cmd)
-  end
-
-  def init_sandbox
-    clear_sandbox
-    Dir.mkdir @config.user_result_dir
-    cp_cmd = "cp -R #{@config.test_data_dir}/ev #{@config.test_sandbox_dir}"
-    system(cp_cmd)
-  end
-
-  def create_submission_from_file(id, user, problem, source_fname, language = @@lang_c)
-    source = File.open(@config.test_data_dir + "/" + source_fname).read
-    stub(Submission,
-         :id => id, :user => user, :problem => problem,
-         :source => source, :language => language)
-  end
-
-  def create_test1_submission_mock_from_file(source_fname)
+  def create_normal_submission_mock_from_file(source_fname)
     create_submission_from_file(1, @user_user1, @problem_test_normal, source_fname)
   end
   
 end
+
