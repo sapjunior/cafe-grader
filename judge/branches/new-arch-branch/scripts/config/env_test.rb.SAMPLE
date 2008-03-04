@@ -2,8 +2,8 @@
 
 Grader::Initializer.run do |config|
   
-  config.problems_dir = "/home/jittat/grader/scripts/test/sandbox/ev"
-  config.user_result_dir = "/home/jittat/grader/scripts/test/sandbox/result"
+  config.problems_dir = GRADER_ROOT + "/test/sandbox/ev"
+  config.user_result_dir = GRADER_ROOT + "/test/sandbox/result"
   
   config.talkative = false
   
@@ -19,7 +19,7 @@ Grader::Initializer.run do |config|
     attr_accessor :test_data_dir, :test_sandbox_dir
   end
 
-  config.test_data_dir = "/home/jittat/grader/scripts/test/data"
-  config.test_sandbox_dir = "/home/jittat/grader/scripts/test/sandbox"
+  config.test_data_dir = GRADER_ROOT + "/test/data"
+  config.test_sandbox_dir = GRADER_ROOT + "/test/sandbox"
 
 end
