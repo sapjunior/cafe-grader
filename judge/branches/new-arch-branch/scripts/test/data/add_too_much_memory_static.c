@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int big_array[10000000];
+int big_array[2000000];
 
 int main()
 {
