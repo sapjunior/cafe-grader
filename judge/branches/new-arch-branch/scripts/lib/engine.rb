@@ -7,6 +7,7 @@ require 'fileutils'
 
 module Grader
 
+  # TODO: move to somewhere else
   class GradingRoomMaker
     def initialize
       @config = Grader::Configuration.get_instance
@@ -25,6 +26,7 @@ module Grader
     end
   end
   
+  # TODO: move to somewhere else
   class GradingReporter
     def initialize
       @config = Grader::Configuration.get_instance
@@ -83,16 +85,16 @@ module Grader
   
   class Engine
     
-    attr_writer :judge_room_maker
+    attr_writer :room_maker
     attr_writer :reporter
 
     def initialize(room_maker=nil, reporter=nil)
       @config = Grader::Configuration.get_instance
 
       if room_maker!=nil
-        @judge_room_maker = room_maker
+        @room_maker = room_maker
       else
-        @judge_room_maker = Grader::GradingRoomMaker.new 
+        @room_maker = Grader::GradingRoomMaker.new 
       end
         
       if reporter!=nil
@@ -119,8 +121,8 @@ module Grader
         language = 'c++'
       end
 
-      grading_dir = @judge_room_maker.produce_grading_room(sub,user,problem)
-      problem_home = @judge_room_maker.find_problem_home(sub,problem)
+      grading_dir = @room_maker.produce_grading_room(sub,user,problem)
+      problem_home = @room_maker.find_problem_home(sub,problem)
 
       # puts "GRADING DIR: #{grading_dir}"
       # puts "PROBLEM DIR: #{problem_home}"
