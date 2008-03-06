@@ -13,6 +13,10 @@ module Grader
     attr_accessor :report_comment
     attr_accessor :rails_env
 
+    attr_accessor :test_request_input_base_dir
+    attr_accessor :test_request_output_base_dir
+    attr_accessor :test_request_problem_templates_dir
+
     @@instance = nil
 
     def self.get_instance
