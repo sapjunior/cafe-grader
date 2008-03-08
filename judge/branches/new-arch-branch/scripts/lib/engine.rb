@@ -61,11 +61,12 @@ module Grader
 
         clear_script(copy_log,problem_home)
 
-        @room_maker.clean_up(submission)
-
       rescue RuntimeError => msg
         @reporter.report_error(submission,"Grading error: #{msg}")
-        
+
+      ensure
+        @room_maker.clean_up(submission)
+
       end
       
       Dir.chdir(current_dir)

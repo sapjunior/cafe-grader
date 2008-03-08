@@ -36,6 +36,18 @@ module Grader
         end
       end
     end
+
+    def grade_oldest_test_request
+      test_request = TestRequest.get_inqueue_and_change_status(Task::STATUS_GRADING)
+      if test_request!=nil 
+        @grader_process.report_active(test_request) if @grader_process!=nil
+        
+        @engine.grade(test_request)
+        test_request.status_complete!
+      end
+      return test_request
+    end
+
   end
 
 end

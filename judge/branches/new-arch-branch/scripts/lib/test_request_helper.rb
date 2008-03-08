@@ -80,8 +80,10 @@ module Grader
     end
     
     def remove_data_files(problem_home)
-      cmd = "rm #{problem_home}/test_cases/1/*"
-      system_and_raise_when_fail(cmd,"Test Request: cannot remove data files")
+      if File.exists?("#{problem_home}/test_cases/1/input-1.txt")
+        cmd = "rm #{problem_home}/test_cases/1/*"
+        system_and_raise_when_fail(cmd,"Test Request: cannot remove data files")
+      end
     end
     
     def system_and_raise_when_fail(cmd,msg)
@@ -113,17 +115,24 @@ module Grader
       cmp_msg = cmp_file.read
       cmp_file.close
       
-      output_file_name = "#{test_result_dir}/1/output.txt"
+      result_file_name = "#{test_result_dir}/1/result"
 
-      results = File.open("#{test_result_dir}/1/result").readlines
+      if File.exists?(result_file_name)
+        output_file_name = "#{test_result_dir}/1/output.txt"
+        results = File.open("#{test_result_dir}/1/result").readlines
+        stat = format_running_stat(results)
 
-      stat = format_running_stat(results)
-
-      return {
-        :output_file_name => output_file_name,
-        :running_stat => stat,
-        :comment => "", 
-        :cmp_msg => cmp_msg}
+        return {
+          :output_file_name => output_file_name,
+          :running_stat => stat,
+          :comment => "", 
+          :cmp_msg => cmp_msg}
+      else
+        return {
+          :running_stat => "",
+          :comment => "Compilation error", 
+          :cmp_msg => cmp_msg}
+      end
     end
 
     def format_running_stat(results)

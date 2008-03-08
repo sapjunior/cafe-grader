@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__),'spec_helper')
 require File.join(File.dirname(__FILE__),'engine_spec_helper')
 
-describe "A grader engine, when grade submissions" do
+describe "A grader engine, when grading submissions" do
 
   include GraderEngineHelperMethods
 
@@ -81,6 +81,10 @@ describe "A grader engine, when grade submissions" do
                     :comment => /FAILED: [^P]P/})
   end
 
+  it "should fail submission with non-zero exit status" do
+    violated("has not been implemented")
+  end
+
   def grader_should(args)
     @user1 = stub(User,
                   :id => 1, :login => 'user1')
@@ -112,7 +116,7 @@ describe "A grader engine, when grade submissions" do
   
 end
 
-describe "A grader engine, when grade test requests" do
+describe "A grader engine, when grading test requests" do
 
   include GraderEngineHelperMethods
 
@@ -148,6 +152,53 @@ describe "A grader engine, when grade test requests" do
                     :compiler_message= => '',
                     :grader_comment= => '',
                     :running_stat= => '0.0 sec.', 
+                    :output_file_name= => lambda { |fname|
+                      File.exists?(fname).should be_true
+                    },
+                    :save => nil})
+  end
+
+  it "should clean up problem directory after running test request" do
+    problem = stub(Problem,
+                   :id => 1, :name => 'test_normal')
+    grader_should(:grade => 'test1_correct.c',
+                  :on => problem,
+                  :with => 'in1.txt',
+                  :and_report => {
+                    :graded_at= => nil,
+                    :compiler_message= => '',
+                    :grader_comment= => '',
+                    :running_stat= => nil, 
+                    :output_file_name= => nil,
+                    :save => nil})
+    File.exists?(@config.user_result_dir + "/test_request/test_normal/test_cases/1/input-1.txt").should be_false
+  end
+
+  it "should compile test request with error and report compilation error" do
+    problem = stub(Problem,
+                   :id => 1, :name => 'test_normal')
+    grader_should(:grade => 'test1_compile_error.c',
+                  :on => problem,
+                  :with => 'in1.txt',
+                  :and_report => {
+                    :graded_at= => nil,
+                    :compiler_message= => /.+/,
+                    :grader_comment= => /[Cc]ompil.*error/,
+                    :running_stat= => '', 
+                    :save => nil})
+  end
+
+  it "should report exit status" do
+    problem = stub(Problem,
+                   :id => 1, :name => 'test_normal')
+    grader_should(:grade => 'add_nonzero_exit_status.c',
+                  :on => problem,
+                  :with => 'in1.txt',
+                  :and_report => {
+                    :graded_at= => nil,
+                    :compiler_message= => '',
+                    :grader_comment= => '',
+                    :running_stat= => /[Ee]xit.*status.*10.*0.0 sec./,
                     :output_file_name= => lambda { |fname|
                       File.exists?(fname).should be_true
                     },
