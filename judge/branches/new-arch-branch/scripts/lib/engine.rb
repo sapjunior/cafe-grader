@@ -1,12 +1,12 @@
-#
-# A grader engine grades a submission, against anything
-#  -- a test data, or a user submitted test data
-#
-
 require 'fileutils'
 
 module Grader
 
+  #
+  # A grader engine grades a submission, against anything: a test
+  # data, or a user submitted test data.  It uses two helpers objects:
+  # room_maker and reporter.
+  #
   class Engine
     
     attr_writer :room_maker
@@ -19,17 +19,19 @@ module Grader
       @reporter = reporter || Grader::SubmissionReporter.new
     end
     
-    def grade(sub)
+    # takes a submission, asks room_maker to produce grading directories,
+    # calls grader scripts, and asks reporter to save the result
+    def grade(submission)
       current_dir = `pwd`.chomp
 
-      user = sub.user
-      problem = sub.problem
+      user = submission.user
+      problem = submission.problem
 
       # TODO: will have to create real exception for this
-      raise "improper submission" if sub.user==nil
+      raise "improper submission" if submission.user==nil
       
-      language = sub.language.name
-      lang_ext = sub.language.ext
+      language = submission.language.name
+      lang_ext = submission.language.ext
       # FIX THIS
       talk 'some hack on language'
       if language == 'cpp'
@@ -42,25 +44,33 @@ module Grader
       else
         source_name = "source.#{lang_ext}"
       end
+
+      begin
+        grading_dir = @room_maker.produce_grading_room(submission)
+        @room_maker.save_source(submission,source_name)
+        problem_home = @room_maker.find_problem_home(submission)
+
+        # puts "GRADING DIR: #{grading_dir}"
+        # puts "PROBLEM DIR: #{problem_home}"
+
+        copy_log = copy_script(problem_home)
       
-      grading_dir = @room_maker.produce_grading_room(sub)
-      @room_maker.save_source(sub,source_name)
-      problem_home = @room_maker.find_problem_home(sub)
+        call_judge(problem_home,language,grading_dir,source_name)
 
-      # puts "GRADING DIR: #{grading_dir}"
-      # puts "PROBLEM DIR: #{problem_home}"
+        @reporter.report(submission,"#{grading_dir}/test-result")
 
-      copy_log = copy_script(problem_home)
-      
-      call_judge(problem_home,language,grading_dir,source_name)
+        clear_script(copy_log,problem_home)
 
-      @reporter.report(sub,"#{grading_dir}/test-result")
+        @room_maker.clean_up(submission)
 
-      clear_script(copy_log,problem_home)
+      rescue RuntimeError => msg
+        @reporter.report_error(submission,"Grading error: #{msg}")
+        
+      end
       
       Dir.chdir(current_dir)
     end
-
+    
     protected
     
     def talk(str)

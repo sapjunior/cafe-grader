@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__),'spec_helper')
 require File.join(File.dirname(__FILE__),'engine_spec_helper')
 
-describe "A grader engine" do
+describe "A grader engine, when grade submissions" do
 
   include GraderEngineHelperMethods
 
@@ -110,5 +110,86 @@ describe "A grader engine" do
     create_submission_from_file(1, @user_user1, @problem_test_normal, source_fname)
   end
   
+end
+
+describe "A grader engine, when grade test requests" do
+
+  include GraderEngineHelperMethods
+
+  before(:each) do
+    @config = Grader::Configuration.get_instance
+    @engine = Grader::Engine.new(Grader::TestRequestRoomMaker.new,
+                                 Grader::TestRequestReporter.new)
+    init_sandbox
+  end
+
+  it "should report error if there is no problem template" do
+    problem = stub(Problem,
+                   :id => 1, :name => 'nothing')
+    grader_should(:grade => 'test1_correct.c',
+                  :on => problem,
+                  :with => 'in1.txt',
+                  :and_report => {
+                    :graded_at= => nil,
+                    :compiler_message= => '',
+                    :grader_comment= => '',
+                    :running_stat= => /template not found/,
+                    :save => nil})
+  end
+
+  it "should run test request and produce output file" do
+    problem = stub(Problem,
+                   :id => 1, :name => 'test_normal')
+    grader_should(:grade => 'test1_correct.c',
+                  :on => problem,
+                  :with => 'in1.txt',
+                  :and_report => {
+                    :graded_at= => nil,
+                    :compiler_message= => '',
+                    :grader_comment= => '',
+                    :running_stat= => '0.0 sec.', 
+                    :output_file_name= => lambda { |fname|
+                      File.exists?(fname).should be_true
+                    },
+                    :save => nil})
+  end
+
+  protected
+  def grader_should(args)
+    @user1 = stub(User,
+                  :id => 1, :login => 'user1')
+
+    problem = args[:on]
+    input_file = @config.test_request_input_base_dir + "/" + args[:with]
+
+    submission = 
+      create_submission_from_file(1, @user1, args[:on], args[:grade])
+
+    test_request = stub(TestRequest,
+                        :id => 1,
+                        :user => @user1,
+                        :problem => problem,
+                        :submission => submission,
+                        :input_file_name => input_file,
+                        :language => submission.language,
+                        :problem_name => problem.name)
+
+    expectations = args[:and_report]
+
+    expectations.each do |key,val|
+      if val==nil
+        test_request.should_receive(key)
+      elsif val.class == Proc
+        test_request.should_receive(key) { |fname|
+          val.call(fname)
+        }
+      else
+        test_request.should_receive(key).with(val)
+      end
+    end
+
+    @engine.grade(test_request)
+  end
+
 end
 

@@ -26,15 +26,23 @@ module Grader
       f.write(submission.source)
       f.close
     end
+
+    def clean_up(submission)
+    end
   end
   
   class SubmissionReporter
     def initialize
       @config = Grader::Configuration.get_instance
     end
-
+    
     def report(sub,test_result_dir)
       save_result(sub,read_result(test_result_dir))
+    end
+    
+    def report_error(sub,msg)
+      save_result(sub,{:points => 0,
+                    :comment => "Grading error: #{msg}" })
     end
 
     protected
@@ -78,7 +86,7 @@ module Grader
       else
         submission.grader_comment = 'FAILED: ' + comment
       end
-      submission.compiler_message = result[:cmp_msg]
+      submission.compiler_message = result[:cmp_msg] or ''
       submission.save
     end
     
