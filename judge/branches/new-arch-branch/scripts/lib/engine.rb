@@ -66,10 +66,8 @@ module Grader
 
       ensure
         @room_maker.clean_up(submission)
-
+        Dir.chdir(current_dir)   # this is really important
       end
-      
-      Dir.chdir(current_dir)
     end
     
     protected

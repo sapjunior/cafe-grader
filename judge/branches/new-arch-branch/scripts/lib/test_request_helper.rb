@@ -137,12 +137,19 @@ module Grader
 
     def format_running_stat(results)
       running_time_line = results[-1]
+
+      run_stat = ""
+      if !(/[Cc]orrect/.match(results[0]))
+        run_stat = results[0].chomp
+      end
+
       if res = /r(.*)u(.*)s/.match(running_time_line)
         seconds = (res[1].to_f + res[2].to_f)
-        "#{seconds} sec."
+        time_stat = "Time used: #{seconds} sec."
       else
-        "n/a sec."
+        time_stat = "Time used: n/a sec."
       end
+      return "#{run_stat}#{time_stat}"
     end
     
     def save_result(test_request,result)

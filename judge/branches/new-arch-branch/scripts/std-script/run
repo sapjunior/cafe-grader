@@ -63,8 +63,10 @@ mem_limit = problem.get_mem_limit(test_num) * 1024
 # Copy the input file.
 #`cp #{problem_home}/test_cases/#{test_num}/#{input_file_name} .`
 
+time_output_format = "%Er%Uu%Ss"
+
 # Run the program.
-run_command = "/usr/bin/time -f \"%Er%Uu%Ss\" 2>run_result #{problem_home}/script/box -a 2 -f -t #{time_limit} -m #{mem_limit} -i #{input_file_name} -o output.txt #{program_name}"
+run_command = "/usr/bin/time -f \"#{time_output_format}\" 2>run_result #{problem_home}/script/box -a 2 -f -t #{time_limit} -m #{mem_limit} -i #{input_file_name} -o output.txt #{program_name}"
 log "Running test #{test_num}..."
 log run_command
 log 
