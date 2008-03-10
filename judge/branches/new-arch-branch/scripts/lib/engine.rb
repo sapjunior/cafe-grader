@@ -28,7 +28,10 @@ module Grader
       problem = submission.problem
 
       # TODO: will have to create real exception for this
-      raise "improper submission" if submission.user==nil
+      if user==nil or problem == nil
+        @reporter.report_error(submission,"Grading error: problem with submission")
+        #raise "engine: user or problem is nil"
+      end
       
       language = submission.language.name
       lang_ext = submission.language.ext

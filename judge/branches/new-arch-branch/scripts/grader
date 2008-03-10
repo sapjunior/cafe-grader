@@ -117,7 +117,7 @@ when "queue", "test_request"
       task = runner.grade_oldest_test_request
     end
     if task==nil
-      sleep(5)
+      sleep(1)
     end
   end
   
