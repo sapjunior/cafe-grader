@@ -71,7 +71,7 @@ time_output_format = "%Er%Uu%Ss"
 
 # check if box is there, if not, compile it!
 if !File.exists?("#{problem_home}/script/box")
-  log "Compiling box: to increase efficiency, it should be compile manually"
+  log "WARNING: Compiling box: to increase efficiency, it should be compile manually"
   compile_box("#{problem_home}/script/box.c",
               "#{problem_home}/script/box")
 end
