@@ -78,7 +78,7 @@ module Grader
       submission.graded_at = Time.now
       points = result[:points]
       submission.points = points
-      comment = @config.report_comment.call(result[:comment])
+      comment = @config.report_comment(result[:comment])
       if problem == nil
         submission.grader_comment = 'PASSED: ' + comment + '(problem is nil)'
       elsif points == problem.full_score
