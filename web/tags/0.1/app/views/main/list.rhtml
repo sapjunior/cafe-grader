@@ -1,0 +1,26 @@
+<div class="title">Hello <%=h @user.full_name %></div>
+Current time is <%= format_short_time(Time.new) %>.
+
+<div class="submitbox">
+  <%= error_messages_for 'submission' %>
+  <%= render :partial => 'submission_box' %>
+</div>
+
+<hr/>
+
+<table class="info">
+  <tr class="info-head">
+    <th class="info"></th>
+    <th class="info">Tasks</th>
+    <th class="info"># of sub(s)</th>
+    <th class="info">Results</th>
+  </tr>
+  <%= render :partial => 'problem', :collection => @problems %>
+</table>
+
+<hr />
+
+<div class="submitbox">
+  <%= render :partial => 'submission_box' %>
+</div>
+
