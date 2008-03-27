@@ -1,20 +1,101 @@
-
-div.problist-each { margin-top: 2px; margin-bottom: 2px}
-
-div.usermenu { 
-  border-top: thin solid grey;
-  border-bottom: thin solid grey;
-  text-align: right
+/* Normal text */
+p {
+    font-size: 12px;
 }
 
-div.probname { 
-  background-color: #66cccc; 
-  font-weight: bold 
+/* This is the main menu bad*/
+div.userbar { 
+    border-top: thin solid grey;
+    border-bottom: thin solid grey;
+    text-align: right;
+    font-size: 12px;
 }
 
-div.subinfo { 
-  margin-left: 20px; 
-  margin-top: 2px;
-  border-bottom: thin solid grey;
-  border-left: thin solid grey
+/* This is the top bar, displaying user's full name */
+div.title {
+    font-size: 20px;
+    font-weight: bold;
+    background: lightgreen;
+    padding: 2px;
+}
+
+/* Standard table with header and rows with alternating background */
+table.info {
+    border: 1px solid black;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+table.info th {
+    border: 1px solid black;
+}
+
+table.info td {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+tr.info-head {
+    background: #777777;
+    color: white;
+}
+
+tr.info-odd {
+    background: #dddddd;
+}
+
+tr.info-even {
+    background: #f0f0f0;
+}
+
+/*******************************
+ [Main]
+********************************/
+div.submitbox {
+    border: thin solid black;
+    padding: 5px;
+    color: white;
+    background-color: #777777;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/*******************************
+ [Settings]
+********************************/
+table.uinfo {
+    border-collapse: collapse;
+    border: 1px solid black;
+    font-size: 13px;
+}
+
+td.uinfo {
+    vertical-align: top;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+th.uinfo {
+    background: lightgreen;
+    vertical-align: top;
+    text-align: right;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+/*******************************
+ [Submission]
+********************************/
+div.compilermsgbody {
+    font-family: monospace;
+}
+
+div.task-menu {
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin-top: 2px;
+    margin-bottom: 4px;
 }

@@ -1,21 +1,32 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'scaffold' %>
+  <%= stylesheet_link_tag 'problems' %>
+  <%= javascript_include_tag :defaults %>
+<% end %>
+
 <h1>Listing problems</h1>
 
-<div class="usermenu">
-<%= link_to 'Main', :controller => 'main', :action => 'list' %>
-</div>
+<%= link_to 'New problem', :action => 'new' %>
+<%= link_to 'Turn off all problems', :action => 'turn_all_off' %><br/>
 
 <table>
   <tr>
-  <% for column in Problem.content_columns %>
-    <th><%= column.human_name %></th>
-  <% end %>
+    <th>Name</th>
+    <th>Full name</th>
+    <th>Full score</th>
+    <th>Date added</th>
+    <th>Available</th>
   </tr>
   
 <% for problem in @problems %>
-  <tr>
-  <% for column in Problem.content_columns %>
-    <td><%=h problem.send(column.name) %></td>
-  <% end %>
+  <tr class="<%= (problem.available) ? "available" : "not-available" %>">
+    <% @problem=problem %>
+    <td><%= in_place_editor_field :problem, :name, {}, :rows=>1 %>
+    <td><%= in_place_editor_field :problem, :full_name, {}, :rows=>1 %>
+    <td><%= in_place_editor_field :problem, :full_score, {}, :rows=>1 %>
+    <td><%= problem.date_added %>
+    <td><%= problem.available %>
+
     <td><%= link_to '[Toggle]', :action => 'toggle_avail', :id => problem.id %></td>
     <td><%= link_to '[Stat]', :action => 'stat', :id => problem.id %></td>
     <td><%= link_to '[Show]', :action => 'show', :id => problem %></td>
@@ -25,8 +36,6 @@
 <% end %>
 </table>
 
-<%= link_to 'Previous page', { :page => @problem_pages.current.previous } if @problem_pages.current.previous %>
-<%= link_to 'Next page', { :page => @problem_pages.current.next } if @problem_pages.current.next %> 
 
 <br />
 

@@ -2,6 +2,10 @@ class ProblemsController < ApplicationController
 
   before_filter :authenticate, :authorization
 
+  in_place_edit_for :problem, :name
+  in_place_edit_for :problem, :full_name
+  in_place_edit_for :problem, :full_score
+
   def index
     list
     render :action => 'list'
@@ -12,9 +16,7 @@ class ProblemsController < ApplicationController
          :redirect_to => { :action => :list }
 
   def list
-    @problem_pages, @problems = paginate(:problems, 
-                                         :per_page => 10,
-                                         :order => 'date_added DESC')
+    @problems = Problem.find(:all, :order => 'date_added DESC')
   end
 
   def show
@@ -61,8 +63,17 @@ class ProblemsController < ApplicationController
     redirect_to :action => 'list'
   end
 
+  def turn_all_off
+    Problem.find(:all,
+                 :conditions => "available = 1").each do |problem|
+      problem.available = false
+      problem.save
+    end
+    redirect_to :action => 'list'
+  end
+
   def stat
     @problem = Problem.find(params[:id])
-    @submissions = Submission.find_last_by_problem(params[:id])
+    @submissions = Submission.find_all_last_by_problem(params[:id])
   end
 end

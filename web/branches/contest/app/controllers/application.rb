@@ -11,6 +11,16 @@ class ApplicationController < ActionController::Base
       redirect_to :controller => 'main', :action => 'login'
       return false
     end
+
+    # check if run in single user mode
+    if defined?(SINGLE_USER_MODE) and (SINGLE_USER_MODE)
+      user = User.find(session[:user_id])
+      if user==nil or user.login != 'root'
+        redirect_to :controller => 'main', :action => 'login'
+        return false
+      end
+    end
+
     return true
   end
 
@@ -25,7 +35,7 @@ class ApplicationController < ActionController::Base
       }
       flash[:notice] = 'You are not authorized to view the page you requested'
       #request.env['HTTP_REFERER'] ? (redirect_to :back) : (redirect_to :controller => 'login')
-      redirect_to :controller => 'login'
+      redirect_to :controller => 'main', :action => 'login'
       return false
     end
   end

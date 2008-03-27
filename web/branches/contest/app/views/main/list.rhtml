@@ -1,38 +1,26 @@
-<h1>Hello <%=h @user.full_name %></h1>
+<div class="title">Hello <%=h @user.full_name %></div>
+Current time is <%= format_short_time(Time.new) %>.
 
-<div class="usermenu">
-<%= user_options %>
+<div class="submitbox">
+  <%= error_messages_for 'submission' %>
+  <%= render :partial => 'submission_box' %>
 </div>
 
-<hr>
+<hr/>
 
-<p style="color: red"><%= flash[:notice] %></p>
+<table class="info">
+  <tr class="info-head">
+    <th></th>
+    <th>Tasks</th>
+    <th># of sub(s)</th>
+    <th>Results</th>
+  </tr>
+  <%= render :partial => 'problem', :collection => @problems %>
+</table>
 
-<div class="problist">
-<% i = 0 %>
-<% @problems.each do |p| %>
-  <div class="problist-each">
-  <div class="probname">
-    <%= "#{i+1}: #{p.full_name} (#{p.name})" %>
-  </div>
-  <div class="subinfo">
-    <%= format_submission(@prob_submissions[i][1],
-		@prob_submissions[i][0]) %>
-  </div>
-  </div>
-  <% i = i+1 %>
-<% end %>
-</div>
-
-<br />
 <hr />
-<br />
 
-<% form_tag({:action => 'submit'}, :multipart => true) do %>
-Problem: <%= select 'submission', 'problem_id', 
-             	[['Specified in header','-1']] + 
-		@problems.collect {|p| [p.full_name, p.id]},
-		:selected => '-1' %>
-File: <%= file_field_tag 'file' %>
-<%= submit_tag 'Submit' %>
-<% end %>
+<div class="submitbox">
+  <%= render :partial => 'submission_box' %>
+</div>
+

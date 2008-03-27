@@ -12,7 +12,7 @@ class UserAdminController < ApplicationController
          :redirect_to => { :action => :list }
 
   def list
-    @user_pages, @users = paginate :users, :per_page => 50
+    @users = User.find(:all)
   end
 
   def show
@@ -31,6 +31,23 @@ class UserAdminController < ApplicationController
     else
       render :action => 'new'
     end
+  end
+
+  def create_from_list
+    lines = params[:user_list]
+    lines.split("\n").each do |line|
+      items = line.split
+      if items.length==5
+        user = User.new
+        user.login = items[0]
+        user.full_name = "#{items[1]} #{items[2]}"
+        user.alias = items[3]
+        user.password = items[4]
+        user.password_confirmation = items[4]
+        user.save
+      end
+    end
+    redirect_to :action => 'list'
   end
 
   def edit
@@ -59,12 +76,13 @@ class UserAdminController < ApplicationController
     @users.each do |u|
       ustat = Array.new
       ustat[0] = u.login
+      ustat[1] = u.full_name
       @problems.each do |p|
-	c, sub = Submission.find_by_user_and_problem(u.id,p.id)
-	if c!=0 
-	  ustat << sub.points
+	sub = Submission.find_last_by_user_and_problem(u.id,p.id)
+	if (sub!=nil) and (sub.points!=nil) 
+	  ustat << [sub.points, (sub.points>=p.full_score)]
 	else
-	  ustat << 0
+	  ustat << [0,false]
 	end
       end
       @scorearray << ustat

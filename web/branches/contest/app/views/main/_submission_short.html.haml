@@ -1,0 +1,20 @@
+
+- if submission==nil
+  = "-"
+- else
+  - if submission.graded_at==nil
+    Submitted at
+    = format_short_time(submission.submitted_at)
+  - else
+    = "Graded at #{format_short_time(submission.graded_at)}, " 
+    = "score: #{submission.points} "
+    = " [" 
+    %tt
+      = submission.grader_comment
+    = "]"
+    = " | "
+    = link_to('[msg]', {:action => 'compiler_msg', :id => submission.id}, {:popup => true})
+  = " | "
+  = link_to('[source]',{:action => 'source', :id => submission.id})
+  = " | "
+  = link_to '[submissions]', :action => 'submission', :id => problem_name
