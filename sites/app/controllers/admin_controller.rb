@@ -43,7 +43,7 @@ class AdminController < ApplicationController
   end
 
   def update
-    @country = Problem.find(params[:id])
+    @country = Country.find(params[:id])
     if @country.update_attributes(params[:country])
       redirect_to :action => 'list'
     else

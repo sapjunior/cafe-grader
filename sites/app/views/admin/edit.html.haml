@@ -2,7 +2,7 @@
 
 = error_messages_for :country
 
-- form_for :country, @country, :url => {:action => 'create'} do |f|
+- form_for :country, @country, :url => {:action => 'update', :id => @country} do |f|
   %p
     Name:
     = f.text_field :name
@@ -16,7 +16,7 @@
     Email:
     = f.text_field :email
   %p
-    = submit_tag "Create"
+    = submit_tag "Edit"
 
 
 
