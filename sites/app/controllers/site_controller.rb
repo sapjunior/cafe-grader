@@ -19,6 +19,7 @@ class SiteController < ApplicationController
   def add
     @site = Site.find(session[:site_id])
     @user = User.new(params[:user])
+    @user.country = @site.country
     @user.site = @site
     if !@user.save
       flash[:notice] = "Error saving user"
@@ -67,6 +68,7 @@ class SiteController < ApplicationController
       if name!=''
         user = User.new({:name => name})
         user.site = site
+        user.country = site.country
         user.save
         count += 1
       end

@@ -2,7 +2,9 @@
   User List for Site:
   = "#{@site.name}, #{@site.country.name}"
 
-= flash[:notice]
+= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice]!=nil
+
+= link_to '[Log out]', :controller => 'login', :action => 'index'
 
 - form_for :user, nil, :url => {:action => 'add'} do |f|
   %b Add Individual User.
@@ -17,12 +19,14 @@
 %table
   %tr
     %th
+    %th Login
     %th Name
     %th
   - counter = 0
   - @users.each do |user|
     %tr
       %td= counter+1
+      %td= user.login
       %td= user.name
       %td
         = link_to '[edit]', :action => 'edit', :id => user.id
