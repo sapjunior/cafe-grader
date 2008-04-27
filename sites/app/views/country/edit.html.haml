@@ -1,0 +1,11 @@
+%h1 
+  Edit Site:
+  = @site.name
+
+
+- form_for :site, @site, :url => {:action => 'update', :id => @site.id} do |f|
+  %p Name:
+  %p= f.text_field :name
+  %p Admin's password:
+  %p= f.text_field :password
+  %p= submit_tag "Update"

@@ -1,0 +1,10 @@
+%h1 Edit User Information
+
+Site:
+= "#{@site.name}, #{@site.country.name}"
+
+- form_for :user, @user, :url => { :action => 'update', :id => @user.id} do |f|
+  %p 
+    Name
+    = f.text_field :name
+  %p= submit_tag "Edit"

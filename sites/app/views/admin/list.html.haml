@@ -1,0 +1,20 @@
+%h1 Country Listing
+
+= link_to "new country", :action => 'new'
+
+%table
+  %tr
+    %th Name
+    %th Login
+    %th Password
+    %th Email
+    %th
+  - @countries.each do |country|
+    %tr
+      %td=h country.name
+      %td=h country.login
+      %td=h country.password
+      %td=h country.email
+      %td
+        = link_to '[edit]', :action => 'edit', :id => country
+        = link_to '[delete]', :action => 'delete', :id => country

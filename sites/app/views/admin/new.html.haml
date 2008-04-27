@@ -1,0 +1,22 @@
+%h1 New country
+
+= error_messages_for :country
+
+- form_for :country, @country, :url => {:action => 'create'} do |f|
+  %p
+    Name:
+    = f.text_field :name
+  %p
+    Login:
+    = f.text_field :login
+  %p
+    Password:
+    = f.text_field :password
+  %p
+    Email:
+    = f.text_field :email
+  %p
+    = submit_tag "Create"
+
+
+

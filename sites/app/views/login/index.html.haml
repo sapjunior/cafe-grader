@@ -1,0 +1,24 @@
+%h1 Site Management for APIO'08
+
+%p= flash[:notice]
+
+%b For Country Manager:
+%br/
+Please login.
+- form_for :country, nil, :url => {:action => 'country_login'} do |f|
+  %p 
+    User:
+    = f.text_field :login
+  %p 
+    Password:
+    = f.password_field :password
+  %p= submit_tag "Login"
+
+
+%b For Site Administrator:
+%br/
+Please select your country
+
+- form_for :site, nil, :url => {:action => 'site_list'} do |f|
+  = select :site, :country_id, @countries.collect { |c| [c.name, c.id] }
+  = submit_tag "Find your site"

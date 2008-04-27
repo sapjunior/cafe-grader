@@ -1,0 +1,12 @@
+%h1 System administration
+
+Please login
+
+- form_for :login, nil, :url => { :action => 'login' } do |f| 
+  User:
+  = f.text_field :user_name 
+  %br/
+  Password:
+  = f.password_field :password
+  %br/
+  = submit_tag "submit"

@@ -1,0 +1,25 @@
+%h1 
+  Site Management for
+  = @country.name
+
+= link_to 'Log out', :action => 'logout'
+%br/
+
+= error_messages_for :site
+
+%b New site:
+- form_for :site, nil, :url => {:action => 'create'} do |f|
+  Name:
+  = f.text_field :name
+  Admin's password:
+  = f.text_field :password
+  = submit_tag "New site"
+
+%table
+  %tr
+    %th
+    %th Name
+    %th Password for admin
+    %th
+  = render :partial => 'site', :collection => @sites
+
