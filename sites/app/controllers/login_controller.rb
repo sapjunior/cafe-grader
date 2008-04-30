@@ -1,16 +1,15 @@
 class LoginController < ApplicationController
 
   def index
-    @countries = Country.find(:all)
-  end
+    countries = Country.find(:all)
+    @country_select = countries.collect { |c| [c.name, c.id] }
 
-  def site_list
-    if params[:site]!=nil
-      @country = Country.find(params[:site][:country_id])
-    else
-      @country = Country.find_by_name(params[:id])
+    @site_select = []
+    countries.each do |country|
+      country.sites.each do |site|
+        @site_select << ["#{site.name},#{country.name}", site.id]
+      end
     end
-    @sites = @country.sites
   end
 
   def site_login
@@ -29,7 +28,7 @@ class LoginController < ApplicationController
   end
 
   def country_login
-    country = Country.find_by_login(params[:country][:login])
+    country = Country.find(params[:country][:id])
     if country==nil
       flash[:notice] = 'Wrong username'
       redirect_to :action => 'index' and return

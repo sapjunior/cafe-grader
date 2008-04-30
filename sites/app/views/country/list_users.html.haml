@@ -1,0 +1,23 @@
+%h1
+  Contestant list for 
+  = @country.name
+
+.menu
+  = link_to '[Re-number]', :action => 'renum'
+  contestants' numbers (sorted by sites and by names)
+  %br/
+  Back to 
+  = link_to '[main country page]', :action => 'list' 
+  
+
+%table.list
+  - @sites.each do |site|
+    %tr.header-site
+      %td{:colspan => 4}
+        = site.name  
+    %tr.header
+      %th
+      %th Login
+      %th Name
+      %th
+    = render :partial => 'user', :collection => site.users

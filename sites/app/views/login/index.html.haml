@@ -1,24 +1,39 @@
 %h1 Site Management for APIO'08
 
-%p= flash[:notice]
+= content_tag(:div,flash[:notice],:class => "notice") if flash[:notice]!=nil 
 
-%b For Country Manager:
+.login-bigbox
+  .title For Country Administrator.
+  %small
+    &nbsp;&nbsp;&nbsp;
+    To add sites, view contestant list, 
+    and manage contestants' id's (when you have many sites).
+    %br/
+  %br/
+  Please login.
+  .login-box
+    - form_for :country, nil, :url => {:action => 'country_login'} do |f|
+      Country:
+      = select :country, :id, @country_select
+      Password:
+      = f.password_field :password
+      = submit_tag "Country Administrator Login"
+
 %br/
-Please login.
-- form_for :country, nil, :url => {:action => 'country_login'} do |f|
-  %p 
-    User:
-    = f.text_field :login
-  %p 
-    Password:
-    = f.password_field :password
-  %p= submit_tag "Login"
 
-
-%b For Site Administrator:
-%br/
-Please select your country
-
-- form_for :site, nil, :url => {:action => 'site_list'} do |f|
-  = select :site, :country_id, @countries.collect { |c| [c.name, c.id] }
-  = submit_tag "Find your site"
+.login-bigbox
+  .title For Site Administrator.
+  %small
+    &nbsp;&nbsp;&nbsp;
+    To add contestants to your site.
+    Please ask your country administrator for password.
+    %br/
+  %br/
+  Please select your site and login.
+  .login-box
+    - form_for :login, nil, :url => {:action => 'site_login'} do |f|
+      Site: 
+      = select :login, :site_id, @site_select
+      Password:
+      = f.password_field :password
+      = submit_tag "Site Administrator Login"

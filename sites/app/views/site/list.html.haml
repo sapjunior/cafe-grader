@@ -4,20 +4,30 @@
 
 = content_tag(:div, flash[:notice], :class => "notice") if flash[:notice]!=nil
 
-= link_to '[Log out]', :controller => 'login', :action => 'index'
+.menu
+  = link_to '[Log out]', :controller => 'login', :action => 'index'
 
-- form_for :user, nil, :url => {:action => 'add'} do |f|
-  %b Add Individual User.
-  Name (first last):
-  = f.text_field :name
-  = submit_tag "Add"
-- form_tag({:action => 'upload'}, :multipart => true) do |f|
-  %b Upload User List:
-  = file_field_tag :file
-  = submit_tag "Upload"
+.new-box
+  - form_for :user, nil, :url => {:action => 'add'} do |f|
+    %b Add Individual User.
+    Name (first last):
+    = f.text_field :name
+    = submit_tag "Add"
+  - form_tag({:action => 'upload'}, :multipart => true) do |f|
+    %b Upload User List:
+    = file_field_tag :file
+    = submit_tag "Upload"
 
-%table
-  %tr
+%h2 Current users
+
+%small
+  %b Notes.
+  The logins are automatically generated.  
+  The running numbers are shared among contestants from the same country.
+  The country manager can rerun the numbers later.
+
+%table.list
+  %tr.header
     %th
     %th Login
     %th Name
@@ -26,8 +36,8 @@
   - @users.each do |user|
     %tr
       %td= counter+1
-      %td= user.login
-      %td= user.name
+      %td.name=h user.login
+      %td.name=h user.name
       %td
         = link_to '[edit]', :action => 'edit', :id => user.id
         = link_to '[delete]', :action => 'delete', :id => user.id

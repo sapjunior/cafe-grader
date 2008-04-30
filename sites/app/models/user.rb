@@ -5,7 +5,16 @@ class User < ActiveRecord::Base
 
   before_create :assign_login
 
+  def self.encode_id(country,num)
+    if num > 9
+      return "#{country.login.upcase}#{num}"
+    else
+      return "#{country.login.upcase}0#{num}"
+    end
+  end
+
   protected 
+
   def assign_login
     return if self.country == nil
     country = self.country
@@ -21,13 +30,7 @@ class User < ActiveRecord::Base
       end            
     end
     log_id = last+1
-    if log_id > 100
-      self.login = "#{country.login.upcase}#{log_id}"
-    elsif log_id > 9
-      self.login = "#{country.login.upcase}#{log_id}"
-    else
-      self.login = "#{country.login.upcase}0#{log_id}"
-    end
+    self.login = User.encode_id(country,log_id)
   end
 
 end

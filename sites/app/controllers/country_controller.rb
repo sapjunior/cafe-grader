@@ -47,6 +47,26 @@ class CountryController < ApplicationController
     end
   end
 
+  def list_users
+    @country = Country.find(session[:country_id])
+    @sites = @country.sites
+    @users = @country.users
+  end
+
+  def renum
+    country = Country.find(session[:country_id])
+    sites = country.sites
+    user_count = 0
+    sites.each do |site|
+      site.users.each do |user|
+        user_count += 1
+        user.login = User.encode_id(country,user_count)
+        user.save
+      end
+    end
+    redirect_to :action => 'list_users'
+  end
+
   protected
 
   def check_user

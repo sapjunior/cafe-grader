@@ -1,0 +1,79 @@
+div.notice {
+    border: 1px dotted red;
+    background: #ffeeee;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+div.login-bigbox {
+    border: 1px solid green;
+    background: #eeffee;
+    padding: 5px;
+}
+
+div.login-bigbox div.title {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0px;
+    border-bottom: 1px solid black;
+}
+
+div.login-box {
+    border: 1px solid black;
+    background: green;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+div.menu {
+    font-size: 12px;
+    font-weight: bold;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-right: 4px solid #aa0000;
+    text-align: right;
+    background: #eeeeee;
+    margin-bottom: 5px;
+}
+
+div.new-box {
+    border: 1px solid green;
+    background: #eeffee;
+    padding: 5px;
+    font-size: 14px;
+}
+
+table.list {
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+table.list tr.header th {
+    font-size: 12px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    background: lightgrey;
+}
+
+table.list tr.header-site td {
+    font-size: 12px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    background: green;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+table.list tr.site {
+    text-align: center
+}
+
+table.list td.name {
+    padding-left: 15px;
+    padding-right: 15px;
+}
