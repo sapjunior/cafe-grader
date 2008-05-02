@@ -12,7 +12,7 @@ class LoginController < ApplicationController
     @site_select = []
     @countries.each do |country|
       country.sites.each do |site|
-        @site_select << ["#{site.name},#{country.name}", site.id]
+        @site_select << ["#{site.name}, #{country.name}", site.id]
       end
     end
   end
