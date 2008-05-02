@@ -65,6 +65,9 @@ class SiteController < ApplicationController
     count = 0
     namestr.split(/$/).each do |name|
       name = name.chomp
+      if name!=nil and name[0,1]=="\n"
+        name = name[1,name.length-1]
+      end
       if name!=''
         user = User.new({:name => name})
         user.site = site

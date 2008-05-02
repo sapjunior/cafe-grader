@@ -99,6 +99,9 @@ class AdminController < ApplicationController
     count = 0
     country_list_str.split(/$/).each do |country_str|
       country_str = country_str.chomp
+      if country_str[0,1]=="\n"
+        country_str = country_str[1,country_str.length-1]
+      end
       if country_str!=''
         items = country_str.split(':')
         country = Country.new
