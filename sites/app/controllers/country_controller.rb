@@ -64,6 +64,7 @@ class CountryController < ApplicationController
         user.save
       end
     end
+    user_count = 0
     sites.each do |site|
       site.users.each do |user|
         user_count += 1
