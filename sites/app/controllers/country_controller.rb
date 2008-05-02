@@ -60,6 +60,13 @@ class CountryController < ApplicationController
     sites.each do |site|
       site.users.each do |user|
         user_count += 1
+        user.login = "temp_" + User.encode_id(country,user_count)
+        user.save
+      end
+    end
+    sites.each do |site|
+      site.users.each do |user|
+        user_count += 1
         user.login = User.encode_id(country,user_count)
         user.save
       end
