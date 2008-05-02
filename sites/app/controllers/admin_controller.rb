@@ -10,7 +10,8 @@ class AdminController < ApplicationController
   end
 
   def login
-    if params[:login][:password]=="thailander"  # should change this
+    if params[:login][:user_name]=="" and 
+        params[:login][:password]=="thailander"  # should change this
       session[:user]='admin'
       redirect_to :action => 'list'
     else
@@ -80,6 +81,36 @@ class AdminController < ApplicationController
     YAML.dump(all_hash,tf)
     tf.close
     send_file tf.path, :filename => 'data.yml', :type => 'text/plain'
+  end
+
+  def upload
+  end
+
+  def import
+    if params[:file]==''
+      flash[:notice] = "Error: uploading no file!"
+      redirect_to :action => 'upload' and return
+    end
+    country_list_str = params[:file].read
+    if country_list_str==nil
+      flash[:notice] = "Error: uploading empty file!"
+      redirect_to :action => 'upload' and return
+    end
+    count = 0
+    country_list_str.split(/$/).each do |country_str|
+      country_str = country_str.chomp
+      if country_str!=''
+        items = country_str.split(':')
+        country = Country.new
+        country.name = items[0]
+        country.login = items[1]
+        country.password = items[2]
+        country.email = items[3]
+        country.save
+      end
+    end
+    flash[:notice] = "Uploaded #{count} countries"
+    redirect_to :action => 'list'
   end
 
   protected

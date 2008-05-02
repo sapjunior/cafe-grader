@@ -1,0 +1,18 @@
+%h1 Upload country data
+
+= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice]!=nil
+
+.menu
+  = link_to "[return]", :action => 'list'
+  to country list
+
+.new-box
+  - form_tag({:action => 'import'}, :multipart => true) do |f|
+    %b Upload country list:
+    = file_field_tag :file
+    = submit_tag "Upload"
+  %br/
+  %small
+    File should be in the following format.
+    %br/
+    %tt name:login:password:email

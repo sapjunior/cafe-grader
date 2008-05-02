@@ -13,7 +13,11 @@ class LoginController < ApplicationController
   end
 
   def site_login
-    site = Site.find(params[:login][:site_id])
+    begin
+      site = Site.find(params[:login][:site_id])
+    rescue ActiveRecord::RecordNotFound
+      site = nil
+    end
     if site==nil
       flash[:notice] = 'Wrong site'
       redirect_to :action => 'index'  and return
@@ -28,7 +32,11 @@ class LoginController < ApplicationController
   end
 
   def country_login
-    country = Country.find(params[:country][:id])
+    begin
+      country = Country.find(params[:country][:id])
+    rescue ActiveRecord::RecordNotFound
+      country = nil
+    end
     if country==nil
       flash[:notice] = 'Wrong username'
       redirect_to :action => 'index' and return
