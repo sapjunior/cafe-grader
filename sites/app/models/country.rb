@@ -1,7 +1,7 @@
 class Country < ActiveRecord::Base
 
-  has_many :sites
-  has_many :users
+  has_many :sites, :dependent => :destroy
+  has_many :users, :dependent => :destroy
 
   validates_presence_of :name
   validates_presence_of :login
