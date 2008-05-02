@@ -1,9 +1,12 @@
-%h1 Country Listing
+%h1 Admin Page
 
-= link_to "new country", :action => 'new'
+.menu
+  = link_to "[new country]", :action => 'new'
+  = link_to "[export]", :action => 'export'
+  = link_to "[log out]", :action => 'logout'
 
-%table
-  %tr
+%table.list
+  %tr.header
     %th Name
     %th Login
     %th Password
@@ -11,10 +14,10 @@
     %th
   - @countries.each do |country|
     %tr
-      %td=h country.name
-      %td=h country.login
-      %td=h country.password
-      %td=h country.email
+      %td.name=h country.name
+      %td.name=h country.login
+      %td.name=h country.password
+      %td.name=h country.email
       %td
         = link_to '[edit]', :action => 'edit', :id => country
         = link_to '[delete]', :action => 'delete', :id => country

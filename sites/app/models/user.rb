@@ -13,6 +13,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def password
+    self[:password] or '(to be assigned)'
+  end
+
   protected 
 
   def assign_login

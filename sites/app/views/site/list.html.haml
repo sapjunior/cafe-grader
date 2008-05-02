@@ -31,6 +31,7 @@
     %th
     %th Login
     %th Name
+    %th Password
     %th
   - counter = 0
   - @users.each do |user|
@@ -38,6 +39,7 @@
       %td= counter+1
       %td.name=h user.login
       %td.name=h user.name
+      %td.name=h user.password
       %td
         = link_to '[edit]', :action => 'edit', :id => user.id
         = link_to '[delete]', :action => 'delete', :id => user.id
