@@ -46,7 +46,7 @@
   .login-box
     - form_for :login, nil, :url => {:action => 'site_login'} do |f|
       Country:
-      = select :site_country, :id, @country_select_with_all, {}, {:onclick => "updateSiteList();" }
+      = select :site_country, :id, @country_select_with_all, {}, {:onchange => "updateSiteList();", :onclick => "updateSiteList();" }
       Site: 
       = select :login, :site_id, @site_select
       %br/
