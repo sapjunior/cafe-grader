@@ -21,6 +21,19 @@
 
 %br/
 
+%script{:type => 'text/javascript'}
+  var siteList = new Array();
+  - @countries.each do |country|
+    = "siteList[#{country.id}] = new Array();"
+    - country.sites.each do |site| 
+      = "siteList[#{country.id}][#{site.id}] = \"#{site.name}\";"
+
+  var allSiteList = new Array();
+  - @site_select.each do |sel|
+    = "allSiteList[#{sel[1]}]=\"#{sel[0]}\";"
+
+%script{:type => 'text/javascript', :src => '/javascripts/site_update.js'}
+
 .login-bigbox
   .title For Site Administrator.
   %small
@@ -29,11 +42,17 @@
     Please ask your country administrator for password.
     %br/
   %br/
-  Please select your site and login.
+  Please select your country and site and login.
   .login-box
     - form_for :login, nil, :url => {:action => 'site_login'} do |f|
+      Country:
+      = select :site_country, :id, @country_select_with_all, {}, {:onclick => "updateSiteList();" }
       Site: 
       = select :login, :site_id, @site_select
+      %br/
       Password:
       = f.password_field :password
       = submit_tag "Site Administrator Login"
+
+%script{:type => 'text/javascript'}
+  updateSiteList();

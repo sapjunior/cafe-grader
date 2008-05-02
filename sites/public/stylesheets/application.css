@@ -23,9 +23,10 @@ div.login-bigbox div.title {
 div.login-box {
     border: 1px solid black;
     background: green;
-    padding: 5px;
+    padding-left: 5px;
     color: white;
     font-weight: bold;
+    line-height: 200%;
 }
 
 div.menu {

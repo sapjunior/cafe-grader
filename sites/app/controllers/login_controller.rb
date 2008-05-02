@@ -1,11 +1,16 @@
 class LoginController < ApplicationController
 
   def index
-    countries = Country.find(:all)
-    @country_select = countries.collect { |c| [c.name, c.id] }
+    @countries = Country.find(:all)
+    @country_select = @countries.collect { |c| [c.name, c.id] }
+
+    @country_select_with_all = [['Any',0]]
+    @countries.each do |country|
+      @country_select_with_all << [country.name, country.id]
+    end
 
     @site_select = []
-    countries.each do |country|
+    @countries.each do |country|
       country.sites.each do |site|
         @site_select << ["#{site.name},#{country.name}", site.id]
       end
@@ -27,7 +32,7 @@ class LoginController < ApplicationController
       redirect_to :controller => 'site', :action => 'list'
     else
       flash[:notice] = 'Wrong site password'
-      redirect_to :action => 'site_list', :id => site.country.name
+      redirect_to :action => 'index'
     end
   end
 
