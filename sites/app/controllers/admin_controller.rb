@@ -118,7 +118,7 @@ class AdminController < ApplicationController
   protected
 
   def random_password(length=5)
-    chars = 'abcdefghjklmnopqrstuvwxyz'
+    chars = 'abcdefghjkmnopqrstuvwxyz'
     password = ''
     length.times { password << chars[rand(chars.length - 1)] }
     password
