@@ -1,0 +1,25 @@
+%h1
+  Contestant list
+
+.menu
+  Back to 
+  = link_to '[main admin page]', :action => 'list' 
+
+- @countries.each do |country|
+  - sites = country.sites
+  - if sites.length!=0
+    %p
+      %b= country.name
+      = "&nbsp;&nbsp;#{country.users.length} contestants"
+    %table.list
+      - sites.each do |site|
+        %tr.header-site
+          %td{:colspan => 5}
+            = site.name  
+        %tr.header
+          %th
+          %th Login
+          %th Name
+          %th Password
+          %th
+        = render :partial => 'user', :collection => site.users

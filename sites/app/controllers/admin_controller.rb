@@ -116,6 +116,10 @@ class AdminController < ApplicationController
     redirect_to :action => 'list'
   end
 
+  def users
+    @countries = Country.find(:all)
+  end
+
   protected
 
   def build_hash_from_collection(collection, name_attrs, attrs)
