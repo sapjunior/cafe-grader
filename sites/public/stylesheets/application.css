@@ -78,3 +78,9 @@ table.list td.name {
     padding-left: 15px;
     padding-right: 15px;
 }
+
+table.list td.passwd {
+    font-size: 13px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
