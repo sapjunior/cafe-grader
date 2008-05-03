@@ -150,9 +150,9 @@ class AdminController < ApplicationController
     country_hash = build_hash_from_collection(countries,:id,
                                               [:name])
     site_hash = build_hash_from_collection(sites,:id,
-                                           [:name,:country_id])
+                                           [:name,:password,:country_id])
     user_hash = build_hash_from_collection(users,:id,
-                                           [:login,:name,:site_id,:country_id])
+                                           [:login,:name,:password,:site_id,:country_id])
     
     all_hash = {
       :countries => country_hash, 
