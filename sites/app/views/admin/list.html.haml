@@ -6,8 +6,11 @@
   = link_to "[upload country list]", :action => 'upload'
   %br/
   = link_to "[view all contestants]", :action => 'users'
+  = link_to "[generate password]", :action => 'passwd'
   = link_to "[export user data]", :action => 'export'
   = link_to "[log out]", :action => 'logout'
+
+= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice]!=nil
 
 %table.list
   %tr.header

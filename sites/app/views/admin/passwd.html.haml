@@ -1,0 +1,17 @@
+%h1 Password Generation
+
+.menu
+  = link_to '[back to main page]', :action => 'list'
+
+%p Please be extremely careful.
+
+= content_tag(:div, flash[:notice], :class => "notice") if flash[:notice]!=nil
+
+.new-box
+  - form_for :passwd, nil, :url => {:action => 'gen_passwd'} do |f|
+    Key:
+    = f.text_field :key
+    For:
+    = select :passwd, :option, [['only unassigned users','unassigned'],['all users','all']]
+    %br/
+    = submit_tag 'Generate'

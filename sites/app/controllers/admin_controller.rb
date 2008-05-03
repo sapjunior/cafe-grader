@@ -5,6 +5,14 @@ class AdminController < ApplicationController
 
   before_filter :check_user, :except => ['index','login']
 
+  verify :method => :post, 
+         :only => ['create', 'import', 'update', 'gen_passwd'], 
+         :redirect_to => {:action => 'list'}
+
+  #
+  # In and out
+  #
+
   def index
     reset_session
   end
@@ -23,6 +31,10 @@ class AdminController < ApplicationController
     reset_session
     redirect_to :controller => 'login', :action => 'index'
   end
+
+  #
+  # Country management
+  #
 
   def list
     @countries = Country.find(:all)
@@ -60,7 +72,77 @@ class AdminController < ApplicationController
     end
   end
 
+  def upload
+  end
+
+  def import
+    import_country_list
+  end
+
+  #
+  # User information
+  #
+
   def export
+    export_data
+  end
+
+  def users
+    @countries = Country.find(:all)
+  end
+
+  def passwd
+  end
+
+  def gen_passwd
+    if params[:passwd][:key]!='I am sure'
+      flash[:notice] = 'Wrong key'
+      render :action => 'passwd' and return
+    end
+    if params[:passwd][:option] == 'unassigned'
+      users = User.find(:all, :conditions => 'ISNULL(password)')
+    else
+      users = User.find(:all)
+    end
+    users.each do |user|
+      user.password = random_password
+      user.save
+    end
+    flash[:notice] = 'Password generation successful'
+    redirect_to :action => 'list'
+  end
+
+  ######################################
+  # Implementation 
+
+  protected
+
+  def random_password(length=5)
+    chars = 'abcdefghjklmnopqrstuvwxyz'
+    password = ''
+    length.times { password << chars[rand(chars.length - 1)] }
+    password
+  end
+
+  def build_hash_from_collection(collection, name_attrs, attrs)
+    h = {}
+    collection.each do |obj|
+      this_hash = {}
+      attrs.each do |attr|
+        this_hash[attr] = obj.send(attr)
+      end
+      h[obj.send(name_attrs)] = this_hash
+    end
+    h
+  end
+
+  def check_user
+    if session[:user]!='admin'
+      redirect_to :action => 'index'
+    end
+  end
+
+  def export_data
     countries = Country.find(:all)
     sites = Site.find(:all)
     users = User.find(:all)
@@ -83,10 +165,7 @@ class AdminController < ApplicationController
     send_file tf.path, :filename => 'data.yml', :type => 'text/plain'
   end
 
-  def upload
-  end
-
-  def import
+  def import_country_list
     if params[:file]==''
       flash[:notice] = "Error: uploading no file!"
       redirect_to :action => 'upload' and return
@@ -114,30 +193,6 @@ class AdminController < ApplicationController
     end
     flash[:notice] = "Uploaded #{count} countries"
     redirect_to :action => 'list'
-  end
-
-  def users
-    @countries = Country.find(:all)
-  end
-
-  protected
-
-  def build_hash_from_collection(collection, name_attrs, attrs)
-    h = {}
-    collection.each do |obj|
-      this_hash = {}
-      attrs.each do |attr|
-        this_hash[attr] = obj.send(attr)
-      end
-      h[obj.send(name_attrs)] = this_hash
-    end
-    h
-  end
-
-  def check_user
-    if session[:user]!='admin'
-      redirect_to :action => 'index'
-    end
   end
 
 end
