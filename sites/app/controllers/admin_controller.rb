@@ -249,6 +249,7 @@ class AdminController < ApplicationController
 
     # import users
     user_data.each_pair do |id,user|
+      @import_log << "#{id}, #{user[:login]}\n"
       u = User.find_by_login(user[:login])
       if u!=nil
         @import_log << "Found #{user[:login]}\n"
@@ -263,7 +264,9 @@ class AdminController < ApplicationController
       if u.site==nil
         @import_log << "Error country/site not found\n"
       else
-        u.save
+        if !u.save
+          @import_log << "Error saving\n"
+        end
       end
     end
 
