@@ -74,6 +74,10 @@ table.list tr.site {
     text-align: center
 }
 
+table.list tr.highlight {
+    background: red;
+}
+
 table.list td.name {
     padding-left: 15px;
     padding-right: 15px;
@@ -84,3 +88,4 @@ table.list td.passwd {
     padding-left: 15px;
     padding-right: 15px;
 }
+
