@@ -1,4 +1,4 @@
-%tr
+%tr{:class => ((user.password == '(to be assigned)') ? 'highlight' : '')}
   %td= user_counter+1
   %td.name= user.login
   %td.name= user.name
