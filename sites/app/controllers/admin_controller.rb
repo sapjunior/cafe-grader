@@ -6,7 +6,7 @@ class AdminController < ApplicationController
   before_filter :check_user, :except => ['index','login']
 
   verify :method => :post, 
-         :only => ['create', 'import', 'update', 'gen_passwd'], 
+         :only => ['create', 'import_country', 'import_data', 'update', 'gen_passwd'], 
          :redirect_to => {:action => 'list'}
 
   #
@@ -75,13 +75,24 @@ class AdminController < ApplicationController
   def upload
   end
 
-  def import
+  def import_country
     import_country_list
   end
 
   #
   # User information
   #
+
+  def import
+  end
+
+  def import_data
+    if params[:file]==''
+      flash[:notice] = 'Error importing no file'
+      redirect_to :action => 'list' and return
+    end
+    import_from_file(params[:file])
+  end
 
   def export
     export_data
@@ -193,6 +204,69 @@ class AdminController < ApplicationController
     end
     flash[:notice] = "Uploaded #{count} countries"
     redirect_to :action => 'list'
+  end
+
+  def import_from_file(f)
+    data_hash = YAML.load(f)
+    @import_log = ""
+    
+    country_data = data_hash[:countries]
+    site_data = data_hash[:sites]
+    user_data = data_hash[:users]
+    
+    # import country
+    countries = {}
+    country_data.each_pair do |id,country|
+      c = Country.find_by_name(country[:name])
+      if c!=nil
+        countries[id] = c
+        @import_log << "Found #{country[:name]}\n"
+      else
+        @import_log << "#{country[:name]} NOT FOUND\n"
+      end
+    end
+
+    # import sites
+    sites = {}
+    site_data.each_pair do |id,site|
+      s = Site.find_by_name(site[:name])
+      if s!=nil
+        @import_log << "Found #{site[:name]}\n"
+      else
+        s = Site.new(:name => site[:name])
+        @import_log << "Created #{site[:name]}\n"
+      end
+      s.password = site[:password]
+      s.country = countries[site[:country_id]]
+
+      if s.country==nil
+        @import_log << "Error country not found\n"
+      else
+        s.save
+        sites[id] = s
+      end
+    end
+
+    # import users
+    user_data.each_pair do |id,user|
+      u = User.find_by_login(user[:login])
+      if u!=nil
+        @import_log << "Found #{user[:login]}\n"
+      else
+        u = User.new(:login => user[:login])
+        @import_log << "Created #{user[:login]}\n"
+      end
+      u.name = user[:name]
+      u.password = user[:password]
+      u.country = countries[user[:country_id]]
+      u.site = sites[user[:site_id]]
+      if u.site==nil
+        @import_log << "Error country/site not found\n"
+      else
+        u.save
+      end
+    end
+
   end
 
 end

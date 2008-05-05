@@ -1,0 +1,9 @@
+%h1 Import successfully
+
+.menu
+  return to
+  = link_to '[main page]', :action => 'list'
+
+%h3 Import log
+
+= simple_format(@import_log)
