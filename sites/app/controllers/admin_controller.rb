@@ -252,7 +252,7 @@ class AdminController < ApplicationController
       @import_log << "#{id}, #{user[:login]}\n"
       u = User.find_by_login(user[:login])
       if u!=nil
-        @import_log << "Found #{user[:login]}\n"
+        @import_log << "Found #{user[:login]}: login = #{u.login}, name = #{u.name}\n"
       else
         u = User.new(:login => user[:login])
         @import_log << "Created #{user[:login]}\n"

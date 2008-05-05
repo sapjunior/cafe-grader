@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
 
   def assign_login
     return if self.country == nil
+    return if self.login!=nil
     country = self.country
     country_users = User.find(:all, 
                               :conditions => { :country_id => country.id })

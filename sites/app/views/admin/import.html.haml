@@ -7,7 +7,7 @@
   to country list
 
 .new-box
-  - form_tag({:action => 'import_data'}, :multipart => true) do |f|
+  - form_tag({:action => 'import_data'}, :multipart => true) do
     %b Upload data:
     = file_field_tag :file
     = submit_tag "Upload"
