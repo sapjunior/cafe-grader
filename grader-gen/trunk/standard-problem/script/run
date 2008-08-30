@@ -1,5 +1,32 @@
 #!/usr/bin/ruby
 
+def log(str='')
+  if ENV['TALKATIVE']!=nil
+    puts str
+  end
+  if ENV['GRADER_LOGGING']!=nil
+    log_fname = ENV['GRADER_LOGGING']
+    fp = File.open(log_fname,"a")
+    fp.puts("run: #{Time.new.strftime("%H:%M")} #{str}")
+    fp.close
+  end
+end
+
+def extract_time(t)
+  #  puts "TIME: #{t}"
+  if (result=/^(.*)r(.*)u(.*)s/.match(t))
+    {:real => result[1], :user => result[2], :sys => result[3]}
+  else
+    #{:real => 0, :user => 0, :sys => 0}
+    #puts "ERROR READING RUNNING TIME: #{t}"
+    raise "Error reading running time: #{t}"
+  end
+end
+
+def compile_box(source,bin)
+  system("g++ #{source} -o #{bin}")
+end
+
 if ARGV.length < 2 || ARGV.length > 3
   puts "Usage: run <language> <test-num> [<program-name>]"
   exit(127)
@@ -19,13 +46,13 @@ load "#{problem_home}/test_cases/all_tests.cfg"
 problem = Problem.get_instance
 
 if problem.well_formed? == false
-  puts "The problem specification is not well formed."
+  log "The problem specification is not well formed."
   exit(127)
 end
 
 # Check if the test number is okay.
 if test_num <= 0 || test_num > problem.num_tests
-  puts "You have specified a wrong test number."
+  log "You have specified a wrong test number."
   exit(127)
 end
 
@@ -43,12 +70,26 @@ mem_limit = problem.get_mem_limit(test_num) * 1024
 # Copy the input file.
 #`cp #{problem_home}/test_cases/#{test_num}/#{input_file_name} .`
 
+# check if box is there, if not, compile it!
+if !File.exists?("#{problem_home}/script/box")
+  log "WARNING: Compiling box: to increase efficiency, it should be compile manually"
+  compile_box("#{problem_home}/script/box.cc",
+              "#{problem_home}/script/box")
+end
+
+# Hide PROBLEM_HOME
+ENV['PROBLEM_HOME'] = nil
+
 # Run the program.
-run_command = "/usr/bin/time -f \"%E\" 2>run_result #{problem_home}/script/box -a 2 -f -t #{time_limit} -m #{mem_limit} -i #{input_file_name} -o output.txt #{program_name}"
-puts "Running test #{test_num}..."
-puts run_command
-puts 
+#run_command = "/usr/bin/time -f \"#{time_output_format}\" 2>run_result #{problem_home}/script/box_new -a 2 -f -t #{time_limit} -m #{mem_limit} -i #{input_file_name} -o output.txt #{program_name}"
+run_command = "#{problem_home}/script/box -a 2 -f -T -t #{time_limit} -m #{mem_limit} -i #{input_file_name} -o output.txt #{program_name} 2>run_result"
+log "Running test #{test_num}..."
+log run_command
+log 
 system(run_command)
+
+# Restore PROBLEM_HOME
+ENV['PROBLEM_HOME'] = problem_home
 
 # Create the result file. 
 result_file = File.new("result", "w") 
@@ -58,38 +99,53 @@ comment_file = File.new("comment", "w")
 run_result_file = File.new("run_result", "r")
 run_result = run_result_file.readlines
 run_result_file.close
-time_elapsed = run_result[run_result.length-1]
+
+run_stat = run_result[run_result.length-1]
+running_time = extract_time(run_stat)
 
 report = lambda{ |status, points, comment|
   result_file.write status.strip
   result_file.write "\n" 
   result_file.write points.to_s.strip
   result_file.write "\n" 
-  result_file.write time_elapsed.strip 
+  result_file.write run_stat.strip 
   result_file.write "\n"
   result_file.close 
   `rm run_result`
-  `rm output.txt`
+  # `rm output.txt`   --- keep the output
 
   comment_file.write comment
+
+  # added for debuggin --- jittat
+  comment_file.write "--run-result--\n"
+  run_result.each do |l|
+    comment_file.write l
+  end
+
   comment_file.close
 
-  puts 
-  puts "Done!"
+  log "Done!"
   exit(0)  
 }
 
 if run_result[0][0,2] != "OK"
-  puts "There was a runtime error."
+  log "There was a runtime error."
   report.call(run_result[0], 0, "No comment.\n")
+end
+
+if running_time[:user].to_f + running_time[:sys].to_f > time_limit
+  log "Time limit exceeded."
+  report.call("Time limit exceeded", 0, "No comment.\n")
 end
 
 # Run 'check' to evaluate the output.
 #puts "There was no runtime error. Proceed to checking the output."
 check_command = "#{problem_home}/script/check #{language} #{test_num}"
-puts "Checking the output..."
-puts check_command
+log "Checking the output..."
+log check_command
 if not system(check_command)
+  log "Problem with check script"
+  report.call("Incorrect",0,"Check script error.\n")
   exit(127)
 end
 
