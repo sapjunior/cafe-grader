@@ -1,8 +1,8 @@
-require 'pony'
+require 'tmail'
 
 class UsersController < ApplicationController
 
-  before_filter :authenticate, :except => [:new, :register]
+  before_filter :authenticate, :except => [:new, :register, :confirm]
 
   verify :method => :post, :only => [:chg_passwd],
          :redirect_to => { :action => :index }
@@ -48,9 +48,57 @@ class UsersController < ApplicationController
     end
   end
 
+  def confirm
+    login = params[:login]
+    key = params[:activation]
+    user = User.find_by_login(login)
+    if (user) and (user.verify_activation_key(key))
+      if user.valid?  # check uniquenss of email
+        user.activated = true
+        user.save
+        @result = :successful
+      else
+        @result = :email_used
+      end
+    else
+      @result = :failed
+    end
+    render :action => 'confirm', :layout => 'empty'
+  end
+
   protected
 
   def send_confirmation_email(user)
+    #user.email = 'jittat@gmail.com'
+
+    contest_name = Configuration['contest.name']
+    activation_url = url_for(:action => 'confirm', 
+                             :login => user.login, 
+                             :activation => user.activation_key)
+    home_url = url_for(:controller => 'main', :action => 'index')
+    mail = TMail::Mail.new
+    mail.to = user.email
+    mail.from = Configuration['system.online_registration.from']
+    mail.subject = "[#{contest_name}] Confirmation"
+    mail.body = <<-EOF
+Hello #{user.full_name},
+
+You have registered for #{contest_name} (#{home_url}).  
+
+Your login is: #{user.login}
+Your password is: #{user.password}
+
+Please follow the link:
+#{activation_url}
+to activate your user account.
+
+If you did not register, please ignore this e-mail.
+
+Thanks!
+EOF
+
+    logger.info "=========== Constructed mail body ==========="
+    logger.info mail.to_s
   end
   
 end

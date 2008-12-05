@@ -117,7 +117,8 @@ class User < ActiveRecord::Base
     end
 
     def uniqueness_of_email_from_activated_users
-      if User.activated.find_by_email(self.email)!=nil
+      user = User.activated.find_by_email(self.email)
+      if user and (user.login != self.login)
         self.errors.add_to_base("Email has already been taken")
       end
     end
