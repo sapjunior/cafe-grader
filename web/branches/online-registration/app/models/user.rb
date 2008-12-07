@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   belongs_to :site
   belongs_to :country
 
-  named_scope :activated, :conditions => {:activated => true}
+  named_scope :activated_users, :conditions => {:activated => true}
 
   validates_presence_of :login
   validates_uniqueness_of :login
@@ -87,6 +87,9 @@ class User < ActiveRecord::Base
   end
 
   def activation_key
+    if self.hashed_password==nil
+      encrypt_new_password
+    end
     Digest::SHA1.hexdigest(self.hashed_password)[0..7]
   end
 
@@ -117,7 +120,7 @@ class User < ActiveRecord::Base
     end
 
     def uniqueness_of_email_from_activated_users
-      user = User.activated.find_by_email(self.email)
+      user = User.activated_users.find_by_email(self.email)
       if user and (user.login != self.login)
         self.errors.add_to_base("Email has already been taken")
       end

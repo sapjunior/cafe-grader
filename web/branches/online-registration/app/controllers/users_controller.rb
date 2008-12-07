@@ -1,4 +1,5 @@
 require 'tmail'
+require 'net/smtp'
 
 class UsersController < ApplicationController
 
@@ -69,8 +70,6 @@ class UsersController < ApplicationController
   protected
 
   def send_confirmation_email(user)
-    #user.email = 'jittat@gmail.com'
-
     contest_name = Configuration['contest.name']
     activation_url = url_for(:action => 'confirm', 
                              :login => user.login, 
@@ -97,8 +96,11 @@ If you did not register, please ignore this e-mail.
 Thanks!
 EOF
 
-    logger.info "=========== Constructed mail body ==========="
-    logger.info mail.to_s
+    smtp_server = Configuration['system.online_registration.smtp']
+
+    Net::SMTP.start(smtp_server) do |smtp|
+      smtp.send_message(mail.to_s, mail.from, mail.to)
+    end
   end
   
 end

@@ -4,10 +4,14 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Site do
 
   before(:each) do
-    start_time = Time.local(2008,5,10,9,00)
+    start_time = Time.local(2008,5,10,9,00).gmtime
     @site = Site.new({:name => 'Test site',
                        :started => true,
                        :start_time => start_time })
+    @site.should_receive(:start_time).
+      any_number_of_times.
+      and_return(start_time)
+    @site.should_receive(:started).any_number_of_times.and_return(true)
   end
   
   it "should report that the contest is not finished when the contest time limit is not set" do
@@ -19,10 +23,10 @@ describe Site do
 
   it "should report that the contest is finished when the contest is over" do
     Configuration.should_receive(:[]).with('contest.time_limit').
-      and_return('5:00')
-    Time.should_receive(:now).and_return(Time.local(2008,5,10,14,01))
-    @site.finished?.should == true
-  end
+    and_return('5:00')
+    Time.should_receive(:now).
+      and_return(Time.local(2008,5,10,14,01).gmtime)
+    @site.finished?.should == true end
 
   it "should report if the contest is finished correctly, when the contest is over, and the contest time contains some minutes" do
     Configuration.should_receive(:[]).twice.with('contest.time_limit').
