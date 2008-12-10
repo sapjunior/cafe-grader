@@ -41,8 +41,11 @@ class UsersController < ApplicationController
     @user.password_confirmation = @user.password = User.random_password
     @user.activated = false
     if (@user.valid?) and (@user.save)
-      send_confirmation_email(@user)
-      render :action => 'new_splash', :layout => 'empty'
+      if send_confirmation_email(@user)
+        render :action => 'new_splash', :layout => 'empty'
+      else
+        render :action => 'email_error', :layout => 'empty'
+      end
     else
       @user.errors.add_to_base("Email cannot be blank") if @user.email==''
       render :action => 'new', :layout => 'empty'
@@ -98,9 +101,16 @@ EOF
 
     smtp_server = Configuration['system.online_registration.smtp']
 
-    Net::SMTP.start(smtp_server) do |smtp|
-      smtp.send_message(mail.to_s, mail.from, mail.to)
+    begin
+      Net::SMTP.start(smtp_server) do |smtp|
+        smtp.send_message(mail.to_s, mail.from, mail.to)
+      end
+      result = true
+    rescue
+      result = false
     end
+
+    return result
   end
   
 end

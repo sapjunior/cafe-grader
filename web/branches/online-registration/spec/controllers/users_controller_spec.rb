@@ -16,12 +16,12 @@ describe UsersController, "when a new user registers" do
     @john.should_receive(:activation_key).
       any_number_of_times.
       and_return(@john_activation_key)
+
+    get :new
+    response.should render_template('users/new')
   end
 
   it "should show the new form again when user information is invalid" do
-    get :new
-    response.should render_template('users/new')
-
     User.should_receive(:new).with(any_args()).and_return(@john)
     @john.should_receive(:activated=).with(false)
     @john.should_receive(:valid?).and_return(false)
@@ -35,9 +35,6 @@ describe UsersController, "when a new user registers" do
   end
 
   it "should create unactivated user and send e-mail with activation key" do
-    get :new
-    response.should render_template('users/new')
-
     User.should_receive(:new).with(any_args()).and_return(@john)
     @john.should_receive(:activated=).with(false)
     @john.should_receive(:valid?).and_return(true)
@@ -58,6 +55,27 @@ describe UsersController, "when a new user registers" do
                     :email => @john_info[:email]
 
     response.should render_template('users/new_splash')    
+  end
+  
+  it "should create unactivated user and return error page when e-mail sending error" do
+    User.should_receive(:new).with(any_args()).and_return(@john)
+    @john.should_receive(:activated=).with(false)
+    @john.should_receive(:valid?).and_return(true)
+    @john.should_receive(:save).and_return(true)
+
+    smtp_mock = mock("smtp")
+    smtp_mock.should_receive(:send_message).
+      and_throw(:error) 
+
+    Net::SMTP.should_receive(:start).
+      with(any_args()).
+      and_yield(smtp_mock)
+
+    post :register, :login => @john_info[:login], 
+                    :full_name => @john_info[:full_name], 
+                    :email => @john_info[:email]
+
+    response.should render_template('users/email_error')    
   end
   
   it "should activate user with valid activation key" do

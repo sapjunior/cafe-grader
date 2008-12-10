@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
 
   validate :uniqueness_of_email_from_activated_users
+  validate :enough_time_interval_between_same_email_registrations
 
   attr_accessor :password
 
@@ -123,6 +124,15 @@ class User < ActiveRecord::Base
       user = User.activated_users.find_by_email(self.email)
       if user and (user.login != self.login)
         self.errors.add_to_base("Email has already been taken")
+      end
+    end
+    
+    def enough_time_interval_between_same_email_registrations
+      open_user = User.find_by_email(self.email,
+                                     :order => 'created_at DESC')
+      if open_user and open_user.created_at and 
+          (open_user.created_at > Time.now.gmtime - 5.minutes)
+        self.errors.add_to_base("There are already unactivated registrations with this e-mail address (please wait for 5 minutes)")
       end
     end
 end
