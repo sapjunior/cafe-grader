@@ -1,0 +1,26 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  menu:
+    main: 'Main'
+    messages: 'Messages'
+    tasks: 'Tasks'
+    submissions: 'Submissions'
+    test: 'Test'
+    help: 'Help'
+    settings: 'Settings'
+    log_out: 'Log out'
+
+  login:
+    message: 'Please login to see the problem list'
+    password: 'Password'
+    participation: 'Want to participate?'
+    please: 'Please'
+    register: 'register'
+
+  registration:
+    title: "New user registration"
+    errors:
+      header: "Errors occured during registration"
+

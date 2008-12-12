@@ -1,0 +1,26 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+th:
+  menu:
+    main: 'หน้าหลัก'
+    messages: 'ข้อความ'
+    tasks: 'โจทย์'
+    submissions: 'โปรแกรมที่ส่ง'
+    test: 'ทดสอบ'
+    help: 'ความช่วยเหลือ'
+    settings: 'ปรับแต่งค่า'
+    log_out: 'ออกจากระบบ'
+
+  login:
+    message: 'กรุณา login เพื่อเข้าสู่ระบบ'
+    password: 'รหัสผ่าน'
+    participation: 'ต้องการเข้าร่วม?'
+    please: 'กรุณา'
+    register: 'ลงทะเบียน'
+
+  registration:
+    title: "การลงทะเบียนผู้ใช้ใหม่"
+    errors:
+      header: 'การลงทะเบียนมีข้อผิดพลาด'
+

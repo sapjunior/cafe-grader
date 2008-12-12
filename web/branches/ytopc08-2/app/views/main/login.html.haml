@@ -10,7 +10,7 @@
 %br/
 
 - if !@hidelogin
-  Please login to see the problem list.
+  =t 'login.message'
   %br/
   %br/
 
@@ -26,16 +26,17 @@
           %td{:align => "right"} Login:
           %td= text_field_tag 'login'
         %tr
-          %td{:align => "right"} Password:
+          %td{:align => "right"} 
+            =t 'login.password'
           %td= password_field_tag
       = submit_tag 'Login'
 %br/
 
 - if Configuration['system.online_registration']
-  Want to participate?  
+  =t 'login.participation'
   %b
-    Please 
-    = link_to 'register.', :controller => :users, :action => :new
+    = "#{t 'login.please'} "
+    = link_to "#{t 'login.register'}", :controller => :users, :action => :new
   %br/
 
 - if (Configuration['system.mode']=='contest') and (Configuration['contest.multisites'])

@@ -21,20 +21,20 @@ module ApplicationHelper
     end
 
     # main page
-    append_to menu_items, '[Main]', 'main', 'list'
-    append_to menu_items, '[Messages]', 'messages', 'list'
+    append_to menu_items, "[#{I18n.t 'menu.main'}]", 'main', 'list'
+    append_to menu_items, "[#{I18n.t 'menu.messages'}]", 'messages', 'list'
 
     if (user!=nil) and (Configuration.show_tasks_to?(user))
-      append_to menu_items, '[Tasks]', 'tasks', 'list'
-      append_to menu_items, '[Submissions]', 'main', 'submission'
-      append_to menu_items, '[Test]', 'test', 'index'
+      append_to menu_items, "[#{I18n.t 'menu.tasks'}]", 'tasks', 'list'
+      append_to menu_items, "[#{I18n.t 'menu.submissions'}]", 'main', 'submission'
+      append_to menu_items, "[#{I18n.t 'menu.test'}]", 'test', 'index'
     end
-    append_to menu_items, '[Help]', 'main', 'help'
+    append_to menu_items, "[#{I18n.t 'menu.help'}]", 'main', 'help'
 
     if Configuration['system.user_setting_enabled']
-      append_to menu_items, '[Settings]', 'users', 'index'
+      append_to menu_items, "[#{I18n.t 'menu.settings'}]", 'users', 'index'
     end
-    append_to menu_items, '[Log out]', 'main', 'login'
+    append_to menu_items, "[#{I18n.t 'menu.log_out'}]", 'main', 'login'
 
     menu_items
   end
