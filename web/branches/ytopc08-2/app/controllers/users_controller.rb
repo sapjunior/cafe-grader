@@ -74,6 +74,7 @@ class UsersController < ApplicationController
 
   def send_confirmation_email(user)
     contest_name = Configuration['contest.name']
+    admin_email = Configuration['system.admin_email']
     activation_url = url_for(:action => 'confirm', 
                              :login => user.login, 
                              :activation => user.activation_key)
@@ -82,22 +83,16 @@ class UsersController < ApplicationController
     mail.to = user.email
     mail.from = Configuration['system.online_registration.from']
     mail.subject = "[#{contest_name}] Confirmation"
-    mail.body = <<-EOF
-Hello #{user.full_name},
+    mail.body = t('registration.email_body', {
+                    :full_name => user.full_name,
+                    :contest_name => contest_name,
+                    :login => user.login,
+                    :password => user.password,
+                    :activation_url => activation_url,
+                    :admin_email => admin_email
+                  })
 
-You have registered for #{contest_name} (#{home_url}).  
-
-Your login is: #{user.login}
-Your password is: #{user.password}
-
-Please follow the link:
-#{activation_url}
-to activate your user account.
-
-If you did not register, please ignore this e-mail.
-
-Thanks!
-EOF
+    logger.info mail.body
 
     smtp_server = Configuration['system.online_registration.smtp']
 

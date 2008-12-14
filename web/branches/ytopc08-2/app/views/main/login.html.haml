@@ -30,7 +30,7 @@
           %td{:align => "right"} 
             ="#{t 'password_label'}:"
           %td= password_field_tag
-      = submit_tag (t 'login.login_submit')
+      = submit_tag t('login.login_submit')
 %br/
 
 - if Configuration['system.online_registration']

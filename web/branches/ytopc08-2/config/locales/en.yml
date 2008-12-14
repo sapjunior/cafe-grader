@@ -7,6 +7,11 @@ en:
   email_label: 'E-mail'
   password_label: 'Password'
 
+  go_ahead_to: "Go ahead to"
+  go_back_to: "Go back to"
+  login_page: "login page"
+  home_page: "home page"
+
   menu:
     main: 'Main'
     messages: 'Messages'
@@ -31,12 +36,40 @@ en:
     login_guide: "Only a-z, A-Z, 0-9 and _.  Can be at most 20 characters long"
     email_guide: "Please make sure that your e-mail is correct.<br/>You'll need to verify your account by email."
     register: "Register"
+
+    email_body: "Hello {{full_name}},
+
+You have registered for {{contest_name}}
+
+Your login is: {{login}}
+Your password is: {{password}}
+
+Please follow the link:
+{{activation_url}}
+to activate your user account.
+
+If you did not register, please ignore this e-mail 
+and report this event to {{admin_email}}.
+
+Thanks!"
+
+    email_sent: "We have sent a confimation message to your e-mail."
+    email_verify_at: "Please check at {{email}}."
+
+    activation_sucessful_title: "User activated"
+    account_activated: "Your account has been activated."
+
+    activation_failed_title: "Activation failed"
+
     errors:
       header: "Errors occured during registration"
       email:
         title: "Errors in sending registration confirmation"
         expl: "<h2>Your user account has been created, but the system cannot send you the confirmation e-mail.</h2>
 Maybe there's a problem in the configuration.  Please report the admin.  Thank you!"
+      activation:
+        email_exists: "A user with this E-mail exists."
+        invalid: "Your activation code is invalid.  Please check again."
 
   activerecord:
     attributes:
