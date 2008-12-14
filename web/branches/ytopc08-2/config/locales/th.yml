@@ -2,6 +2,11 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 th:
+  login_label: 'ชื่อเข้าใช้ระบบ (login)'
+  full_name_label: 'ชื่อเต็ม'
+  email_label: 'E-mail'
+  password_label: 'รหัสผ่าน'
+
   menu:
     main: 'หน้าหลัก'
     messages: 'ข้อความ'
@@ -14,13 +19,29 @@ th:
 
   login:
     message: 'กรุณา login เพื่อเข้าสู่ระบบ'
-    password: 'รหัสผ่าน'
+    login_submit: 'เข้าใช้ระบบ'
     participation: 'ต้องการเข้าร่วม?'
     please: 'กรุณา'
     register: 'ลงทะเบียน'
 
   registration:
     title: "การลงทะเบียนผู้ใช้ใหม่"
+    successful_title: "การลงทะเบียนเสร็จเรียบร้อย"
+
+    login_guide: "ใช้ได้เฉพาะ a-z, A-Z, 0-9 และ _ ความยาวไม่เกิน 20 ตัวอักษร"
+    email_guide: "กรุณาตรวจสอบ e-mail ที่ใส่ให้ถูกต้อง<br/>คุณจะต้องยืนยันการลงทะเบียนผ่านทางข้อมูลที่จะส่งให้ทาง e-mail"
+    register: "ลงทะเบียน"
     errors:
       header: 'การลงทะเบียนมีข้อผิดพลาด'
+      email:
+        title: "เกิดปัญหาระหว่างการส่ง e-mail เพื่อยืนยันการสมัคร"
+        expl: "<h2>บัญชีผู้ใช้ของคุณถูกสร้างขึ้นแล้ว แต่ระบบไม่สามารถส่ง e-mail เพื่อยืนยันการสมัครได้</h2>
+อาจเกิดปัญหาในการตั้งค่าเริ่มต้นของระบบ กรุณาช่วยติดต่อผู้ดูแลระบบด้วย ขอบคุณล่วงหน้า!"
+
+  activerecord:
+    attributes:
+      user:
+        login: "ชื่อเข้าใช้ระบบ"
+        full_name: "ชื่อเต็ม"
+        email: "e-mail"
 

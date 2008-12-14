@@ -1,6 +1,7 @@
 /* Normal text */
-p {
-    font-size: 12px;
+body {
+    font-size: 13px;
+    font-family: "Sans Serif";
 }
 
 /* This is the main menu bad*/

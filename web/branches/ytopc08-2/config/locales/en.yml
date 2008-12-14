@@ -2,6 +2,11 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  login_label: 'Login'
+  full_name_label: 'Full name'
+  email_label: 'E-mail'
+  password_label: 'Password'
+
   menu:
     main: 'Main'
     messages: 'Messages'
@@ -14,13 +19,30 @@ en:
 
   login:
     message: 'Please login to see the problem list'
-    password: 'Password'
+    login_submit: 'Login'
     participation: 'Want to participate?'
     please: 'Please'
     register: 'register'
 
   registration:
     title: "New user registration"
+    successful_title: "Registration successful"
+    
+    login_guide: "Only a-z, A-Z, 0-9 and _.  Can be at most 20 characters long"
+    email_guide: "Please make sure that your e-mail is correct.<br/>You'll need to verify your account by email."
+    register: "Register"
     errors:
       header: "Errors occured during registration"
+      email:
+        title: "Errors in sending registration confirmation"
+        expl: "<h2>Your user account has been created, but the system cannot send you the confirmation e-mail.</h2>
+Maybe there's a problem in the configuration.  Please report the admin.  Thank you!"
+
+  activerecord:
+    attributes:
+      user:
+        login: "login"
+        full_name: "full name"
+        email: "e-mail"
+
 
