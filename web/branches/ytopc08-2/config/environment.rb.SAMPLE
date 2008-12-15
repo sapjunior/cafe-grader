@@ -50,7 +50,6 @@ Rails::Initializer.run do |config|
   # Required gems
   # -------------
 
-  # This is for rspec
   config.gem "haml"
   config.gem "tmail"
   #config.gem "BlueCloth", :lig => "bluecloth"
