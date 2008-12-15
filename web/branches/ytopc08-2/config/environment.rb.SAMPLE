@@ -49,10 +49,12 @@ Rails::Initializer.run do |config|
   # -------------
   # Required gems
   # -------------
-
   config.gem "haml"
   config.gem "tmail"
   #config.gem "BlueCloth", :lig => "bluecloth"
+
+  # NOTES on rspec: if you wan to test with rspec, you have to install
+  # rspec yourself, just call: [sudo] gem install rspec-rails
 end
 
 # Add new inflection rules using the following format 
