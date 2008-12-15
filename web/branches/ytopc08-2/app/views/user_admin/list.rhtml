@@ -34,14 +34,18 @@
 <table>
   <tr>
   <% for column in User.content_columns %>
-    <th><%= column.human_name %></th>
+    <% if !@hidden_columns.index(column.name) %>
+      <th><%= column.human_name %></th>
+    <% end %>
   <% end %>
   </tr>
   
 <% for user in @users %>
   <tr>
   <% for column in User.content_columns %>
-    <td><%=h user.send(column.name) %></td>
+    <% if !@hidden_columns.index(column.name) %>
+      <td><%=h user.send(column.name) %></td>
+    <% end %>
   <% end %>
     <td><%= link_to 'Show', :action => 'show', :id => user %></td>
     <td><%= link_to 'Edit', :action => 'edit', :id => user %></td>

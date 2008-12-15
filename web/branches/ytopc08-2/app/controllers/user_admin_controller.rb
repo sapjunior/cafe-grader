@@ -13,6 +13,7 @@ class UserAdminController < ApplicationController
 
   def list
     @users = User.find(:all)
+    @hidden_columns = ['hashed_password', 'salt', 'created_at', 'updated_at']
   end
 
   def show
