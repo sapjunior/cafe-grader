@@ -37,6 +37,10 @@ class UsersController < ApplicationController
   end
 
   def register
+    if(params[:cancel])
+      redirect_to :controller => 'main', :action => 'login'
+      return
+    end
     @user = User.new(params[:user])
     @user.password_confirmation = @user.password = User.random_password
     @user.activated = false
@@ -44,6 +48,7 @@ class UsersController < ApplicationController
       if send_confirmation_email(@user)
         render :action => 'new_splash', :layout => 'empty'
       else
+        @admin_email = Configuration['system.admin_email']
         render :action => 'email_error', :layout => 'empty'
       end
     else
