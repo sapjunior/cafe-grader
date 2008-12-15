@@ -2,10 +2,14 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 th:
+  cancel: 'ยกเลิก'
+
   login_label: 'ชื่อเข้าใช้ระบบ (login)'
   full_name_label: 'ชื่อเต็ม'
   email_label: 'E-mail'
   password_label: 'รหัสผ่าน'
+  school_label: 'โรงเรียน'
+  trained_at_ipst_label: 'เคยเข้าอบรมที่สสวทหรือไม่?'
 
   go_ahead_to: "ไปยัง"
   go_back_to: "กลับไปยัง"
@@ -37,6 +41,9 @@ th:
     email_guide: "กรุณาตรวจสอบ e-mail ที่ใส่ให้ถูกต้อง<br/>คุณจะต้องยืนยันการลงทะเบียนผ่านทางข้อมูลที่จะส่งให้ทาง e-mail"
     register: "ลงทะเบียน"
 
+    trained_yes: "เคย"
+    trained_no: "ไม่เคย"
+
     email_body: "สวัสดีครับ {{full_name}},
 
 คุณได้ลงทะเบียนเข้าร่วมการแข่งขัน {{contest_name}}
@@ -66,7 +73,7 @@ th:
       email:
         title: "เกิดปัญหาระหว่างการส่ง e-mail เพื่อยืนยันการสมัคร"
         expl: "<h2>บัญชีผู้ใช้ของคุณถูกสร้างขึ้นแล้ว แต่ระบบไม่สามารถส่ง e-mail เพื่อยืนยันการสมัครได้</h2>
-อาจเกิดปัญหาในการตั้งค่าเริ่มต้นของระบบ กรุณาช่วยติดต่อผู้ดูแลระบบด้วย ขอบคุณล่วงหน้า!"
+อาจเกิดปัญหาในการตั้งค่าเริ่มต้นของระบบ กรุณาช่วยติดต่อผู้ดูแลระบบด้วยที่ {{email}}<br/>ขอขอบคุณจากทีมงาน"
       activation:
         email_exists: "มีผู้ใช้ที่ใช้ e-mail นี้แล้ว"
         invalid: "รหัสสำหรับยืนยันผิดพลาด กรุณาตรวจสอบอีกครั้ง"

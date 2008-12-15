@@ -6,6 +6,8 @@ en:
   full_name_label: 'Full name'
   email_label: 'E-mail'
   password_label: 'Password'
+  school_label: 'School'
+  trained_at_ipst_label: 'Trained at IPST?'
 
   go_ahead_to: "Go ahead to"
   go_back_to: "Go back to"
@@ -37,6 +39,9 @@ en:
     email_guide: "Please make sure that your e-mail is correct.<br/>You'll need to verify your account by email."
     register: "Register"
 
+    trained_yes: "Yes"
+    trained_no: "No"
+
     email_body: "Hello {{full_name}},
 
 You have registered for {{contest_name}}
@@ -66,7 +71,7 @@ Thanks!"
       email:
         title: "Errors in sending registration confirmation"
         expl: "<h2>Your user account has been created, but the system cannot send you the confirmation e-mail.</h2>
-Maybe there's a problem in the configuration.  Please report the admin.  Thank you!"
+Maybe there's a problem in the configuration.  Please report the admin at {{email}}.<br/>Thank you!"
       activation:
         email_exists: "A user with this E-mail exists."
         invalid: "Your activation code is invalid.  Please check again."

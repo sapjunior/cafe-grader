@@ -20,6 +20,14 @@
       %td= f.text_field :full_name
     %tr
       %td{:align => "right"}
+        = "#{t 'school_label'}:"
+      %td= f.text_field :school
+    %tr
+      %td{:align => "right"}
+        = "#{t 'trained_at_ipst_label'}:"
+      %td= f.select :trained_at_ipst, [[(t 'registration.trained_no'),0],[(t 'registration.trained_yes'),1]]
+    %tr
+      %td{:align => "right"}
         = "#{t 'email_label'}:"
       %td= f.text_field :email
     %tr
@@ -28,5 +36,8 @@
         %small
           =t 'registration.email_guide'
     %tr
-      %td{:colspan => 2}= submit_tag (t 'registration.register')
+      %td/
+      %td
+        = submit_tag((t 'registration.register'), :name => 'commit')
+        = submit_tag((t 'cancel'), :name => 'cancel')
 
