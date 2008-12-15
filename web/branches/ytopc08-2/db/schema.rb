@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081215012843) do
+ActiveRecord::Schema.define(:version => 20081215094303) do
 
   create_table "announcements", :force => true do |t|
     t.string   "author"
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(:version => 20081215012843) do
     t.datetime "updated_at"
     t.string   "school"
     t.boolean  "trained_at_ipst"
+    t.string   "province"
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true

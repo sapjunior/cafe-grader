@@ -9,6 +9,7 @@ th:
   email_label: 'E-mail'
   password_label: 'รหัสผ่าน'
   school_label: 'โรงเรียน'
+  province_label: 'จังหวัด'
   trained_at_ipst_label: 'เคยเข้าอบรมที่สสวทหรือไม่?'
 
   go_ahead_to: "ไปยัง"
@@ -84,4 +85,5 @@ th:
         login: "ชื่อเข้าใช้ระบบ"
         full_name: "ชื่อเต็ม"
         email: "e-mail"
+        province: "จังหวัด"
 

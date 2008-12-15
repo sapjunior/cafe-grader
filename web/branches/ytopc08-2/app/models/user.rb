@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
   validate :uniqueness_of_email_from_activated_users
   validate :enough_time_interval_between_same_email_registrations
 
+  # these are for ytopc
+  validates_presence_of :province
+
   attr_accessor :password
 
   before_save :encrypt_new_password

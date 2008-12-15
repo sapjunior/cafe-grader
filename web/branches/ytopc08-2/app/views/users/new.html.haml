@@ -24,6 +24,10 @@
       %td= f.text_field :school
     %tr
       %td{:align => "right"}
+        = "#{t 'province_label'}:"
+      %td= f.text_field :province
+    %tr
+      %td{:align => "right"}
         = "#{t 'trained_at_ipst_label'}:"
       %td= f.select :trained_at_ipst, [[(t 'registration.trained_no'),0],[(t 'registration.trained_yes'),1]]
     %tr

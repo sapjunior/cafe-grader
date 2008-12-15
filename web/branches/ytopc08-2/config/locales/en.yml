@@ -2,11 +2,14 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  cancel: 'Cancel'
+
   login_label: 'Login'
   full_name_label: 'Full name'
   email_label: 'E-mail'
   password_label: 'Password'
   school_label: 'School'
+  province_label: 'Province'
   trained_at_ipst_label: 'Trained at IPST?'
 
   go_ahead_to: "Go ahead to"
@@ -82,5 +85,5 @@ Maybe there's a problem in the configuration.  Please report the admin at {{emai
         login: "login"
         full_name: "full name"
         email: "e-mail"
-
+        province: "province"
 
