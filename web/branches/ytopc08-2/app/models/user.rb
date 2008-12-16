@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   validates_length_of :password, :within => 4..20, :if => :password_required?
   validates_confirmation_of :password, :if => :password_required?
 
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :allow_blank => true
+  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
 
   validate :uniqueness_of_email_from_activated_users
   validate :enough_time_interval_between_same_email_registrations
