@@ -42,6 +42,7 @@ th:
     start_soon: "การแข่งขันกำลังจะเริ่ม กรุณารอก่อน"
     specified_in_header: "ระบุที่หัวโปรแกรมแล้ว"
 
+    problem_desc: "อ่าน"
     submitted_at: "ส่งเมื่อเวลา"
     graded_at: "ตรวจเมื่อเวลา"
     score: "คะแนน: "
