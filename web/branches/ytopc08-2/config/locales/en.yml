@@ -22,10 +22,14 @@ en:
     messages: 'Messages'
     tasks: 'Tasks'
     submissions: 'Submissions'
-    test: 'Test'
+    test: 'Test Interface'
     help: 'Help'
     settings: 'Settings'
     log_out: 'Log out'
+
+  title_bar:
+    current_time: "Current time is"
+    remaining_time: "Time left: "
 
   login:
     message: 'Please login to see the problem list'
@@ -33,6 +37,15 @@ en:
     participation: 'Want to participate?'
     please: 'Please'
     register: 'register'
+
+  main:
+    start_soon: "The contest at your site will start soon.  Please wait."
+    specified_in_header: "Specified in header"
+
+  test:
+    title: "Test Interface"
+    intro: "You can test your submission with your own test data on the grading environment using this test interface."
+    disabled_at_end_announcement: "<b>Note:</b> Test interface will be disabled in the last 30 minutes of the contest time on your site."
 
   registration:
     title: "New user registration"

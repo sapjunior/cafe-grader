@@ -79,7 +79,8 @@ module ApplicationHelper
 CONTEST_OVER
       end
       if user.site!=nil
-        time_left = ". Time left: #{Time.at(user.site.time_left).gmtime.strftime("%X")}"
+        time_left = "&nbsp;&nbsp" + (t 'title_bar.remaining_time') + 
+          " #{Time.at(user.site.time_left).gmtime.strftime("%X")}"
       end
     end
     
@@ -104,7 +105,7 @@ ANALYSISMODE
 <tr>
 <td class="left-col">
 #{user.full_name}<br/>
-Current time is #{format_short_time(Time.new.gmtime)} UTC
+#{t 'title_bar.current_time'} #{format_short_time(Time.new)}
 #{time_left}
 <br/>
 </td>

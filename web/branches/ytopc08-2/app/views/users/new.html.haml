@@ -1,5 +1,9 @@
-%h1 
-  =t 'registration.title'
+.contest-title
+  %h1
+    = "#{Configuration['contest.name']}: #{t 'registration.title'}"
+
+.registration-desc
+  =t 'registration.description'
 
 = error_messages_for :user, :header_message => (t 'registration.errors.header')
 
