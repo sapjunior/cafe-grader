@@ -4,10 +4,10 @@
 - else
   - if submission.graded_at==nil
     =t 'main.submitted_at'
-    = format_short_time(submission.submitted_at)
+    = format_short_time(submission.submitted_at.localtime)
   - else
     = t 'main.graded_at'
-    = "#{format_short_time(submission.graded_at)}, " 
+    = "#{format_short_time(submission.graded_at.localtime)}, " 
     - if Configuration['ui.show_score']
       = t 'main.score'
       = "#{(submission.points*100/submission.problem.full_score).to_i} "
