@@ -39,7 +39,8 @@ class User < ActiveRecord::Base
   validate :enough_time_interval_between_same_email_registrations
 
   # these are for ytopc
-  validates_presence_of :province
+  # disable for now
+  #validates_presence_of :province
 
   attr_accessor :password
 
