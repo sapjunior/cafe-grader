@@ -50,10 +50,13 @@ en:
 You have registered for {{contest_name}}
 
 Your login is: {{login}}
+
 Your password is: {{password}}
 
 Please follow the link:
+
 {{activation_url}}
+
 to activate your user account.
 
 If you did not register, please ignore this e-mail 
