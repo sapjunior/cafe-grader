@@ -42,6 +42,13 @@ en:
     start_soon: "The contest at your site will start soon.  Please wait."
     specified_in_header: "Specified in header"
 
+    submitted_at: "Submitted at"
+    graded_at: "Graded at"
+    score: "score: "
+    cmp_msg: "compiler msg"
+    src_link: "src"
+    submissions_link: "submissions"
+
   test:
     title: "Test Interface"
     intro: "You can test your submission with your own test data on the grading environment using this test interface."
