@@ -30,6 +30,7 @@ en:
   title_bar:
     current_time: "Current time is"
     remaining_time: "Time left: "
+    contest_not_started: "The contest has not started."
 
   login:
     message: 'Please login to see the problem list'

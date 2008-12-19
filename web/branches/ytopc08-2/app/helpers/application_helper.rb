@@ -78,9 +78,13 @@ module ApplicationHelper
 </td></tr>
 CONTEST_OVER
       end
-      if user.site!=nil
-        time_left = "&nbsp;&nbsp" + (t 'title_bar.remaining_time') + 
-          " #{Time.at(user.site.time_left).gmtime.strftime("%X")}"
+      if !user.site.started
+        time_left = "&nbsp;&nbsp;" + (t 'title_bar.contest_not_started')
+      else
+        if user.site!=nil
+          time_left = "&nbsp;&nbsp;" + (t 'title_bar.remaining_time') + 
+            " #{Time.at(user.site.time_left).gmtime.strftime("%X")}"
+        end
       end
     end
     

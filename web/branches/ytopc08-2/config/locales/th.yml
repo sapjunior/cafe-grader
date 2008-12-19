@@ -30,6 +30,7 @@ th:
   title_bar:
     current_time: "เวลาปัจจุบันคือ"
     remaining_time: "เหลือเวลาอีก"
+    contest_not_started: "ยังไม่เริ่มแข่งขัน"
 
   login:
     message: 'กรุณา login เพื่อเข้าสู่ระบบ'

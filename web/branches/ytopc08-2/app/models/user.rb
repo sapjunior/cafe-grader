@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
 
   before_save :encrypt_new_password
+  before_save :assign_default_site
 
   def self.authenticate(login, password)
     user = find_by_login(login)
@@ -116,6 +117,12 @@ class User < ActiveRecord::Base
       self.hashed_password = User.encrypt(self.password,self.salt)
     end
   
+    def assign_default_site
+      if self.site==nil
+        self.site = Site.find_by_name('default')
+      end
+    end
+
     def password_required?
       self.hashed_password.blank? || !self.password.blank?
     end
