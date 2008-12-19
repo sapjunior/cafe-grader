@@ -81,7 +81,7 @@ class UsersController < ApplicationController
 
   def verify_online_registration
     if !Configuration['system.online_registration']
-      redirect_to :controller => :main, :action => :index
+      redirect_to :controller => 'main', :action => 'login'
     end
   end
 
