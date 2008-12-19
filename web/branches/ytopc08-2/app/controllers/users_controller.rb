@@ -5,6 +5,8 @@ class UsersController < ApplicationController
 
   before_filter :authenticate, :except => [:new, :register, :confirm]
 
+  before_filter :verify_online_registration, :only => [:new, :register]
+
   verify :method => :post, :only => [:chg_passwd],
          :redirect_to => { :action => :index }
 
@@ -76,6 +78,12 @@ class UsersController < ApplicationController
   end
 
   protected
+
+  def verify_online_registration
+    if !Configuration['system.online_registration']
+      redirect_to :controller => :main, :action => :index
+    end
+  end
 
   def send_confirmation_email(user)
     contest_name = Configuration['contest.name']
