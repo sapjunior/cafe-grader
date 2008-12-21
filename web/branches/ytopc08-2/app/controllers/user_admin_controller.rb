@@ -78,8 +78,7 @@ class UserAdminController < ApplicationController
     @scorearray = Array.new
     @users.each do |u|
       ustat = Array.new
-      ustat[0] = u.login
-      ustat[1] = u.full_name
+      ustat[0] = u
       @problems.each do |p|
 	sub = Submission.find_last_by_user_and_problem(u.id,p.id)
 	if (sub!=nil) and (sub.points!=nil) 
