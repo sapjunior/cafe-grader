@@ -33,10 +33,18 @@ class User < ActiveRecord::Base
   validates_length_of :password, :within => 4..20, :if => :password_required?
   validates_confirmation_of :password, :if => :password_required?
 
-  validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+  # e-mail validation
 
-  validate :uniqueness_of_email_from_activated_users
-  validate :enough_time_interval_between_same_email_registrations
+  cattr_accessor :email_validation
+  self.email_validation = false
+
+  validates_format_of :email, 
+                      :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
+                      :if => :email_validation?
+  validate :uniqueness_of_email_from_activated_users, 
+           :if => :email_validation?
+  validate :enough_time_interval_between_same_email_registrations, 
+           :if => :email_validation?
 
   # these are for ytopc
   # disable for now
@@ -140,11 +148,16 @@ class User < ActiveRecord::Base
     
     def enough_time_interval_between_same_email_registrations
       return if !self.new_record?
+      return if self.activated
       open_user = User.find_by_email(self.email,
                                      :order => 'created_at DESC')
       if open_user and open_user.created_at and 
           (open_user.created_at > Time.now.gmtime - 5.minutes)
         self.errors.add_to_base("There are already unactivated registrations with this e-mail address (please wait for 5 minutes)")
       end
+    end
+
+    def email_validation?
+      self.email_validation
     end
 end
