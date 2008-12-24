@@ -14,9 +14,10 @@ module ApplicationHelper
       append_to menu_items, '[Msg console]', 'messages', 'console'
       append_to menu_items, '[Problem admin]', 'problems', 'index'
       append_to menu_items, '[User admin]', 'user_admin', 'index'
-      append_to menu_items, '[User stat]', 'user_admin', 'user_stat'
+      append_to menu_items, '[Results]', 'user_admin', 'user_stat'
       append_to menu_items, '[Graders]', 'graders', 'list'
-      append_to menu_items, '[Site config]', 'configurations', 'index'
+      append_to menu_items, '[Sites]', 'sites', 'index'
+      append_to menu_items, '[System config]', 'configurations', 'index'
       menu_items << "<br/>"
     end
 
