@@ -6,23 +6,21 @@ class SiteController < ApplicationController
     # Site administrator login
     @countries = Country.find(:all, :include => :sites)
     @country_select = @countries.collect { |c| [c.name, c.id] }
-
+    
     @country_select_with_all = [['Any',0]]
     @countries.each do |country|
       @country_select_with_all << [country.name, country.id]
     end
-
+    
     @site_select = []
     @countries.each do |country|
       country.sites.each do |site|
         @site_select << ["#{site.name}, #{country.name}", site.id]
       end
     end
-
-    if @countries.empty?
-      @default_site = Site.first
-    end
-
+    
+    @default_site = Site.first if !Configuration['contest.multisite']
+    
     render :action => 'login', :layout => 'empty'
   end
 
