@@ -18,8 +18,8 @@ class AdminController < ApplicationController
   end
 
   def login
-    if params[:login][:user_name]=="" and 
-        params[:login][:password]=="thailander"  # should change this
+    if params[:login][:user_name]==ADMIN_USER and 
+        params[:login][:password]==ADMIN_PASSWORD
       session[:user]='admin'
       redirect_to :action => 'list'
     else

@@ -15,6 +15,8 @@ class LoginController < ApplicationController
         @site_select << ["#{site.name}, #{country.name}", site.id]
       end
     end
+
+    @contest_name = CONTEST_NAME
   end
 
   def site_login
