@@ -4,7 +4,9 @@
 
 <div class="test-desc">
   <%=t 'test.intro' %><br/>
-  <%=t 'test.disabled_at_end_announcement' %>
+  <% if Configuration['contest.test_request.early_timeout'] %>
+    <%=t 'test.disabled_at_end_announcement' %>
+  <% end %>
 </div>
 
 <% if @problems.length==0 %>
