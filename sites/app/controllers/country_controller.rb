@@ -54,21 +54,30 @@ class CountryController < ApplicationController
   end
 
   def renum
+    if PREFIX_LEVEL != :country
+      redirect_to :action => 'list_users'
+      return
+    end
+
     country = Country.find(session[:country_id])
     sites = country.sites
+
+    # rename twice to avoid name conflict
+    # first prefix with "temp_"
     user_count = 0
     sites.each do |site|
       site.users.each do |user|
         user_count += 1
-        user.login = "temp_" + User.encode_id(country,user_count)
+        user.login = "temp_" + User.encode_id_by_country(country,user_count)
         user.save
       end
     end
+    # this is the real one
     user_count = 0
     sites.each do |site|
       site.users.each do |user|
         user_count += 1
-        user.login = User.encode_id(country,user_count)
+        user.login = User.encode_id_by_country(country,user_count)
         user.save
       end
     end
