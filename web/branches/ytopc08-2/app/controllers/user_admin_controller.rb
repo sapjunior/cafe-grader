@@ -153,6 +153,7 @@ class UserAdminController < ApplicationController
       u.country = countries[user[:country_id]]
       u.site = sites[user[:site_id]]
       u.activated = true
+      u.email = "empty-#{u.login}@none.com"
       if not u.save
         @import_log << "Errors\n"
         u.errors.each { |attr,msg|  @import_log << "#{attr} - #{msg}\n" } 
