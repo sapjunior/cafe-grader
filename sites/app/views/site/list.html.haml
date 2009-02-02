@@ -23,8 +23,11 @@
 %small
   %b Notes.
   The logins are automatically generated.  
-  The running numbers are shared among contestants from the same country.
-  The country manager can rerun the numbers later.
+  - if PREFIX_LEVEL == :country
+    The running numbers are shared among contestants from the same country.
+    The country manager can rerun the numbers later.
+  - else
+    The running numbers are shared among contestants from the same site.
 
 %table.list
   %tr.header

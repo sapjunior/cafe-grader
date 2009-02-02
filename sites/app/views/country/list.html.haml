@@ -15,10 +15,12 @@
 .new-box
   %strong New site.
   - form_for :site, nil, :url => {:action => 'create'} do |f|
+    Login:
+    = f.text_field :login, :size => 5
     Name:
-    = f.text_field :name
+    = f.text_field :name, :size => 15
     Admin's password:
-    = f.text_field :password
+    = f.text_field :password, :size => 15
     = submit_tag "New site"
 
 %h2
@@ -27,6 +29,7 @@
 %table.list
   %tr.header
     %th{:width => "10px"}
+    %th{:width => "200px"} Login
     %th{:width => "200px"} Name
     %th{:width => "200px"} Password for admin
     %th

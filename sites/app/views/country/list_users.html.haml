@@ -3,8 +3,12 @@
   = @country.name
 
 .menu
-  = link_to '[Re-number]', :action => 'renum'
-  contestants' numbers (sorted by sites and by names)
+  - if PREFIX_LEVEL==:country
+    = link_to '[Re-number]', :action => 'renum'
+    contestants' numbers (sorted by sites and by names)
+  - else
+    You can't renumber contestants, 
+    because the numbering is done by sites.
   %br/
   Back to 
   = link_to '[main country page]', :action => 'list' 

@@ -64,3 +64,6 @@ ADMIN_PASSWORD = 'site_admin'
 
 # Contest name
 CONTEST_NAME = "YTOPC Feb'09"
+
+# User prefix level (either :country or :site)
+PREFIX_LEVEL = :site

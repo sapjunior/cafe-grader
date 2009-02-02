@@ -111,7 +111,7 @@ class AdminController < ApplicationController
       render :action => 'passwd' and return
     end
     if params[:passwd][:option] == 'unassigned'
-      users = User.find(:all, :conditions => 'ISNULL(password)')
+      users = User.find(:all, :conditions => 'password IS NULL')
     else
       users = User.find(:all)
     end
