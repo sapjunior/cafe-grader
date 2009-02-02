@@ -152,7 +152,10 @@ class UserAdminController < ApplicationController
       u.password = user[:password]
       u.country = countries[user[:country_id]]
       u.site = sites[user[:site_id]]
-      u.save
+      if not u.save
+        @import_log << "Errors\n"
+        u.errors.each { |attr,msg|  @import_log << "#{attr} - #{msg}\n" } 
+      end
     end
 
   end
