@@ -19,7 +19,7 @@ class SiteController < ApplicationController
       end
     end
     
-    @default_site = Site.first if !Configuration['contest.multisite']
+    @default_site = Site.first if !Configuration['contest.multisites']
     
     render :action => 'login', :layout => 'empty'
   end
