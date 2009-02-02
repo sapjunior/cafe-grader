@@ -33,11 +33,6 @@ class User < ActiveRecord::Base
   validates_length_of :password, :within => 4..20, :if => :password_required?
   validates_confirmation_of :password, :if => :password_required?
 
-  # e-mail validation
-
-  cattr_accessor :email_validation
-  self.email_validation = false
-
   validates_format_of :email, 
                       :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, 
                       :if => :email_validation?
@@ -162,6 +157,10 @@ class User < ActiveRecord::Base
     end
 
     def email_validation?
-      self.email_validation
+      begin
+        return VALIDATE_USER_EMAILS
+      rescue
+        return false
+      end
     end
 end

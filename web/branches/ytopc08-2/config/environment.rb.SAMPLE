@@ -84,5 +84,5 @@ GRADING_RESULT_DIR = '/home/thailandoi/ytopc/judge/result'
 # Uncomment so that configuration is read only once when the server is loaded
 # Configuration.enable_caching
 
-# Uncomment so that the system doesn't validate user e-mails
-# User.email_validation = true
+# Uncomment so that the system validates user e-mails
+# VALIDATE_USER_EMAILS = true
