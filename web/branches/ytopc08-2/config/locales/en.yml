@@ -86,8 +86,8 @@ and report this event to {{admin_email}}.
 
 Thanks!"
 
-    email_sent: "We have sent a confimation message to your e-mail."
-    email_verify_at: "Please check at {{email}}."
+    email_sent: "We have sent a confimation message to your e-mail.  (Please also check the Junk mail box."
+    email_verify_at: "Please check at {{email}} and confirm."
 
     activation_sucessful_title: "User activated"
     account_activated: "Your account has been activated."
