@@ -181,7 +181,11 @@ class MainController < ApplicationController
         @prob_submissions << { :count => 0, :submission => nil }
       end
     end
-    @announcements = Announcement.find_published
+    if Configuration.show_tasks_to?(@user)
+      @announcements = Announcement.find_published(true)
+    else
+      @announcements = Announcement.find_published
+    end
   end
 
   def check_viewability
