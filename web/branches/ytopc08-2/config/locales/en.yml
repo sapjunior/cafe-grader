@@ -63,7 +63,6 @@ en:
     login_guide: "Only a-z, A-Z, 0-9 and _.  Can be at most 20 characters long"
     email_guide: "Please make sure that your e-mail is correct.<br/>You'll need to verify your account by email."
     register: "Register"
-
     trained_yes: "Yes"
     trained_no: "No"
 

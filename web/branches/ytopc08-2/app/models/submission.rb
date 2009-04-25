@@ -61,6 +61,15 @@ class Submission < ActiveRecord::Base
                     })
   end
 
+  def download_filename
+    if self.problem.output_only
+      return self.source_filename
+    else
+      timestamp = self.submitted_at.localtime.strftime("%H%M%S")
+      return "#{self.problem.name}-#{timestamp}.#{self.language.ext}"
+    end
+  end
+
   protected
 
   def self.find_option_in_source(option, source)
@@ -81,23 +90,30 @@ class Submission < ActiveRecord::Base
     return nil
   end
 
-  def self.find_language_in_source(source)
+  def self.find_language_in_source(source, source_filename="")
     langopt = find_option_in_source(/^LANG:/,source)
-    if language = Language.find_by_name(langopt)
-      return language
-    elsif language = Language.find_by_pretty_name(langopt)
-      return language
+    if langopt
+      return (Language.find_by_name(langopt) || 
+              Language.find_by_pretty_name(langopt))
     else
-      return nil
+      if source_filename
+        return Language.find_by_extension(source_filename.split('.').last)
+      else
+        return nil
+      end
     end
   end
 
-  def self.find_problem_in_source(source)
+  def self.find_problem_in_source(source, source_filename="")
     prob_opt = find_option_in_source(/^TASK:/,source)
     if problem = Problem.find_by_name(prob_opt)
       return problem
     else
-      return nil
+      if source_filename
+        return Problem.find_by_name(source_filename.split('.').first)
+      else
+        return nil
+      end
     end
   end
 
@@ -109,12 +125,14 @@ class Submission < ActiveRecord::Base
         self.problem = nil
       end
     else
-      self.problem = Submission.find_problem_in_source(self.source)
+      self.problem = Submission.find_problem_in_source(self.source,
+                                                       self.source_filename)
     end
   end
 
   def assign_language
-    self.language = Submission.find_language_in_source(self.source)
+    self.language = Submission.find_language_in_source(self.source,
+                                                       self.source_filename)
   end
 
   # validation codes

@@ -55,6 +55,7 @@ Rails::Initializer.run do |config|
 
   # NOTES on rspec: if you wan to test with rspec, you have to install
   # rspec yourself, just call: [sudo] gem install rspec-rails
+
 end
 
 # Add new inflection rules using the following format 
@@ -86,3 +87,7 @@ GRADING_RESULT_DIR = '/home/thailandoi/ytopc/judge/result'
 
 # Uncomment so that the system validates user e-mails
 # VALIDATE_USER_EMAILS = true
+
+# Uncomment so that Apache X-Sendfile is used when delivering files
+# (e.g., in /tasks/view).
+USE_APACHE_XSENDFILE = true
