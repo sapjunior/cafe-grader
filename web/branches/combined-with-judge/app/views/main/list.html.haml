@@ -1,0 +1,30 @@
+= user_title_bar(@user)
+
+- if @announcements.length!=0
+  .announcementbox
+    %span{:class => 'title'}
+      Announcements
+    = render :partial => 'announcement', :collection => @announcements
+
+- if Configuration.show_submitbox_to?(@user)
+  .submitbox
+    = error_messages_for 'submission'
+    = render :partial => 'submission_box'
+
+
+%hr/
+
+- if (Configuration.contest_mode) and (@user.site!=nil) and (@user.site.started!=true)
+  %p=t 'main.start_soon'
+
+- if Configuration.show_tasks_to?(@user)
+  %table.info
+    %tr.info-head
+      %th
+      %th Tasks
+      %th # of sub(s)
+      %th Results
+    = render :partial => 'problem', :collection => @problems
+
+%hr/
+
