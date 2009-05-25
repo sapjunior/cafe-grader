@@ -68,10 +68,15 @@ class MainController < ApplicationController
 
     if @submission.valid?
       if @submission.save == false
+        # can't save
 	flash[:notice] = 'Error saving your submission'
-      elsif Task.create(:submission_id => @submission.id, 
-                        :status => Task::STATUS_INQUEUE) == false
-	flash[:notice] = 'Error adding your submission to task queue'
+      else 
+        # send grading task to grader message queue
+        grading_env = in_contest? ? 'exam' : 'grading'
+        if !GraderMessage.create_grade_submission(@submission,
+                                                 grading_env)
+          flash[:notice] = 'Error adding your submission to task queue'
+        end
       end
     else
       prepare_list_information
@@ -164,6 +169,11 @@ class MainController < ApplicationController
   end
 
   protected
+
+  def in_contest?
+    Configuration[SYSTEM_MODE_CONF_KEY]=='contest'
+  end
+
   def prepare_list_information
     @problems = Problem.find_available_problems
     @prob_submissions = Array.new

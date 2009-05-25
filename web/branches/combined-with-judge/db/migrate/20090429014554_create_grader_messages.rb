@@ -5,8 +5,9 @@ class CreateGraderMessages < ActiveRecord::Migration
       t.integer :command
       t.string :options
       t.integer :target_id
-      t.boolean :taken
-      t.integer :taken_grader_process_id
+      t.boolean :accepted
+      t.boolean :completed
+      t.integer :accepting_grader_process_id
       t.timestamps
     end
   end

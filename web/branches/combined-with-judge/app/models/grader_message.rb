@@ -18,7 +18,8 @@ class GraderMessage < ActiveRecord::Base
                          :command => command,
                          :options => options,
                          :target_id => target_id,
-                         :taken => false)
+                         :accepted => false,
+                         :completed => false)
   end
 
   def self.create_grade_submission(submission, 
@@ -54,23 +55,27 @@ class GraderMessage < ActiveRecord::Base
         message = GraderMessage.find(:first, 
                                      :order => "created_at", 
                                      :conditions => 
-                                     "(`taken` = 0)" + 
+                                     "(`accepted` = 0)" + 
                                      " AND (#{recp_conditions})" + 
                                      " AND (#{command_conditions})",
                                      :lock => true)
         if message!=nil
-          message.taken = true
-          message.taken_grader_process_id = recipient_id
+          message.accepted = true
+          message.accepting_grader_process_id = recipient_id
           message.save!
         end
       end
       
     rescue
       message = nil
-
     end
     
     message
+  end
+
+  def complete!
+    self.completed = true
+    self.save!
   end
   
   protected
