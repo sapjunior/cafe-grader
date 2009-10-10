@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.2' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -42,7 +42,7 @@ Rails::Initializer.run do |config|
   config.time_zone = 'UTC'
   
   # Setting locales
-  config.i18n.default_locale = 'th'
+  config.i18n.default_locale = 'en'
 
   # See Rails::Configuration for more options
 
@@ -51,7 +51,7 @@ Rails::Initializer.run do |config|
   # -------------
   config.gem "haml"
   config.gem "tmail"
-  config.gem "BlueCloth", :lib => "bluecloth"
+  config.gem "rdiscount", :lib => "rdiscount"
 
   # NOTES on rspec: if you wan to test with rspec, you have to install
   # rspec yourself, just call: [sudo] gem install rspec-rails
@@ -80,7 +80,9 @@ TEST_REQUEST_OUTPUT_FILE_DIR = RAILS_ROOT + '/data/test_request/output'
 # To use ANALYSIS MODE, provide the testcases/testruns breakdown,
 # and the directory of the grading result (usually in judge's dir).
 TASK_GRADING_INFO_FILENAME = RAILS_ROOT + '/config/tasks.yml'
-GRADING_RESULT_DIR = '/home/thailandoi/ytopc/judge/result'
+
+# TODO: change this to where results are kept.
+GRADING_RESULT_DIR = 'RESULT-DIR'
 
 # Uncomment so that configuration is read only once when the server is loaded
 # Configuration.enable_caching
